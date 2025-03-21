@@ -1,0 +1,307 @@
+doctype html
+html(lang='en')
+
+    head
+
+        meta(charset='utf-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(name='description' content='')
+        meta(name='author' content='')
+
+        title Efremov Dmitry CV
+
+        link(rel="icon", type="image/png", href="/assets/img/favicon-96x96.png" sizes="96x96")
+        link(rel="icon", type="image/svg+xml", href="/assets/img/favicon.svg")
+        link(rel="shortcut icon", href="/assets/img/favicon.ico")
+        link(rel="apple-touch-icon", sizes="180x180", href="/assets/img/apple-touch-icon.png")
+        link(rel="manifest", href="/assets/site.webmanifest")
+
+        // Font Awesome icons (free version)
+        script(src='https://use.fontawesome.com/releases/v6.3.0/js/all.js' crossorigin='anonymous')
+
+        // Google fonts
+        link(rel="preconnect" href="https://fonts.googleapis.com")
+        link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+        link(href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet")
+
+        // Core theme CSS (includes Bootstrap)
+        link(href='css/styles.css' rel='stylesheet')
+
+    body#page-top
+
+        // Навигация
+        nav#sideNav.navbar.navbar-expand-lg.navbar-dark.bg-secondary.fixed-top
+            a.navbar-brand.js-scroll-trigger(href='#page-top')
+                span.d-block.d-lg-none Ефремов Дмитрий
+                span.d-none.d-lg-block
+                    img.img-fluid.img-profile.rounded-circle.mx-auto.mb-2(src='assets/img/profile.jpg' alt='...')
+            button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Переключить навигацию')
+                span.navbar-toggler-icon
+            #navbarResponsive.collapse.navbar-collapse
+                ul.navbar-nav
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#about') О себе
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#skills') Навыки
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#experience') Опыт
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#projects') Проекты
+                    li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#interests') Интересы
+                    li.nav-item.mt-2
+                        a.font.link-primary(href='/') EN
+                        span /
+                        a.link-primary(href='/ru.html') RU
+
+        // Контент страницы
+        .container-fluid.p-0
+            // О себе
+            section#about.resume-section
+                .resume-section-content
+                    h1.mb-3
+                        | Ефремов
+                        span.text-primary Дмитрий
+                    .subheading.mb-5
+                        a(href='mailto:name@email.com') d.efremov2001@mail.ru
+                    p.lead.mb-5
+                        | Екатеринбург, Удаленно
+                    p.lead.mb-5
+                        | Я Дмитрий Ефремов, разработчик программного обеспечения, тимлид. Занимаюсь VR, fullstack разработкой с практическим опытом работы Unity, ASP.NET, EF Core и React.
+                    .social-icons
+                        a.social-icon(href='https://t.me/mrvbnz')
+                            i.fab.fa-telegram
+                        a.social-icon(href='https://github.com/MrVbnz')
+                            i.fab.fa-github
+                        a.social-icon(href='https://www.linkedin.com/in/dmitry-efr/')
+                            i.fab.fa-linkedin-in
+
+            hr.m-0
+
+            // Навыки
+            section#skills.resume-section
+                .resume-section-content
+                    h2.mb-5 Навыки
+                    .column-container
+                        .column
+                            h3.mb-3.mt-3 Hard
+                            .subheading.mb-1.mt-1
+                            ul.fa-ul.mb-0
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | Unity
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | C#
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | ASP.NET
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | Entity Framework Core
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | Nginx
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | SignalR
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | React (TypeScript)
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | Docker Compose
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | C/C++
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | JavaScript
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | Python
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | Java
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | WPF
+                                li
+                                    span.fa-li
+                                        i.fas.fa-check
+                                    | Windows Forms
+                        .column
+                                h3.mb-3.mt-3 Soft
+                                ul.fa-ul.mb-0
+                                    li
+                                        span.fa-li
+                                            i.fas.fa-check
+                                        | Управление командой, разделение и назначение задач
+                                    li
+                                        span.fa-li
+                                            i.fas.fa-check
+                                        | Разделение и назначение задач
+                                    li
+                                        span.fa-li
+                                            i.fas.fa-check
+                                        | Обучение, включение в процесс новых сотрудников
+
+                                h3.mb-3.mt-3 Other
+                                ul.fa-ul.mb-0
+                                    li
+                                        span.fa-li
+                                            i.fas.fa-check
+                                        | Cinema 4d
+                                    li
+                                        span.fa-li
+                                            i.fas.fa-check
+                                        | Blender
+
+            hr.m-0
+
+            // Опыт работы
+            section#experience.resume-section
+                .resume-section-content
+                    h2.mb-5 Опыт
+                    .d-flex.flex-column.flex-md-row.justify-content-between.mb-5
+                        .flex-grow-1
+                            h3.mb-0 Unity-разработчик
+                            .subheading.mb-3 Ceramic 3D
+                        .flex-shrink-0
+                            span.text-primary Сентябрь 2024 - настоящее время
+                    .d-flex.flex-column.flex-md-row.justify-content-between.mb-5
+                        .flex-grow-1
+                            h3.mb-0 Unity VR-разработчик, тимлид
+                            .subheading.mb-3 NovATrans
+                        .flex-shrink-0
+                            span.text-primary Сентябрь 2023 – Сентябрь 2024
+
+            hr.m-0
+            // Проекты
+            section#projects.resume-section
+                .resume-section-content
+                    h2.mb-5 Проекты
+                        h3.mb-3 Университетские / Личные проекты
+                        ul.fa-ul.mb-0
+                            li
+                                h4.mb-3.mt-3 Онлайн-редактор графов в реальном времени (Fullstack)
+                                ul.fa-ul.mb-0
+                                    li
+                                        p
+                                            strong Backend:
+                                            | ASP.NET, EF Core, SignalR
+                                    li
+                                        p
+                                            strong Frontend:
+                                            | React (TypeScript), Bootstrap
+                                    li
+                                        p
+                                            | Разработал редактор графов с поддержкой совместного редактирования в реальном времени, аналогично Google документам. В основном работал над архитектурой бэкенда и интеграцией с базой данных, иногда обновляя фронтенд для соответствия изменениям API.
+                            li
+                                h4.mb-3.mt-3 Многоцелевой сервис для выполнения облачных функций (Backend)
+                                ul.fa-ul.mb-0
+                                    li
+                                        p
+                                            strong Backend:
+                                            | Flask-RESTful, MongoDB
+                                    li
+                                        p
+                                            | Разработал сервис, объединяющий несколько провайдеров облачных функций (AWS, Yandex, Sber, Selectel) в единый REST API. Поддерживает версионирование, загрузку и развертывание функций, автоматически адаптируя их под форматы разных провайдеров.
+
+                        h3.mb-3 НПЦ NovATrans
+                        ul.fa-ul.mb-0
+                            li
+                                h4.mb-3 Виртуальная станция (Web Backend, Frontend)
+                                ul.fa-ul.mb-0
+                                    li
+                                        p
+                                            strong Backend:
+                                            | ASP.NET, EF Core
+                                    li
+                                        p
+                                            strong Frontend:
+                                            | Vite, React (TypeScript), Bootstrap
+                                    li
+                                        p
+                                            strong Десктоп-клиент:
+                                            | Unity
+                                    li
+                                        p Участвовал в разработке многопользовательского проекта с поддержкой VR и ПК. Первоначально занимался поддержкой и улучшением бэкенда, позже работал над обновлениями фронтенда. Перенёс инфраструктуру с IIS (Windows Server) на Docker Compose для упрощения развертывания.
+
+                            li
+                                h4.mb-3 AR-стенд для выставки (Fullstack)
+                                ul.fa-ul.mb-0
+                                    li
+                                        p
+                                            strong Backend:
+                                            | Node.js, Nginx
+                                    li
+                                        p
+                                            strong Frontend:
+                                            | JavaScript с Three.js и AR.js
+                                    li
+                                        p Разработал веб-приложение с дополненной реальностью с нуля, реализовав локальный хостинг через HTTPS для доступа к камере браузера. Проект предназначен для выставочного стенда, объединяющего физические макеты с AR-контентом.
+
+                            li
+                                h4.mb-3 Интерактивная музейная экспозиция
+                                ul.fa-ul.mb-0
+                                    li
+                                        p
+                                            strong Технологии:
+                                            | Unity, Arduino IDE
+                                    li
+                                        p Создал интерактивную экспозицию для музея с сенсорными экранами, отображающими динамический контент. Разработал движущийся стенд с сервоприводами, визуализирующий развитие скоростных железных дорог.
+
+                            li
+                                h4.mb-3 VR-симулятор для обучения на локомотиве ТЭМ18ДМ
+                                ul.fa-ul.mb-0
+                                    li
+                                        p
+                                            strong Технология:
+                                            | Unity с кастомным редактором сценариев
+                                    li
+                                        p Улучшил и расширил редактор сценариев, разработав новые механики и учебные сценарии для повышения функциональности симулятора.
+
+                            li
+                                h4.mb-3 VR-симулятор экстремальных ситуаций на поезде ЭП2Д
+                                ul.fa-ul.mb-0
+                                    li
+                                        p
+                                            strong Технологии:
+                                            | Unity, кастомный редактор сценариев, физическая симуляция огня
+                                    li
+                                        p Переработал редактор сценариев, используя граф задач для создания нелинейных многопользовательских сценариев и упростив работу для новых сотрудников.
+                                        p Разработал инструмент симуляции распространения огня на основе графа с запеканием свойств объектов, позволяющий моделировать динамику пожара и взаимодействие с ним (например, использование огнетушителя). Визуальные эффекты огня реализованы с помощью Unity Visual Effect Graph.
+                                        p Проводил обучение новых сотрудников и помогал в создании сценариев с использованием нового редактора.
+
+            // Интересы
+            section#interests.resume-section
+                .resume-section-content
+                    h2.mb-5 Интересы
+                    h3.mv-3 Разработка механик / Шейдеров
+                    p Люблю создавать уникальные игровые механики и визуальные эффекты
+                    h3.mv-3 Низкоуровневое программирование
+                    p Реализую интересные мне алгоритмы на C/C++ чтобы лучше понять их суть и методы оптимизации
+                    h3.mv-3 Активный отдых
+                    p Увлекаюсь треккингом, походами и велопрогулками
+                    h3.mv-3 3D-печать и покраска миниатюр
+                    p Люблю 3D-печать, создаю и крашу миниатюры.
+
+                // Bootstrap core JS
+                script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js')
+
+                // Core theme JS
+                script(src='js/scripts.js')
