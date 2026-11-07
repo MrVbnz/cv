@@ -1,6 +1,7 @@
 import { Box, Link } from '@chakra-ui/react';
 import { Navigation } from './components/Navigation';
 import { ResumeSection } from './components/ResumeSection';
+import { ScrollGradient } from './components/ScrollGradient';
 import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
 import { Experience } from './components/sections/Experience';
@@ -29,9 +30,12 @@ export function App() {
         {data.ui.skipToContent}
       </Link>
       <Navigation />
+      <ScrollGradient />
       <Box
         as="main"
         id="main-content"
+        position="relative"
+        zIndex="1"
         tabIndex={-1}
         pt="var(--header-height)"
         ml={{ lg: 'var(--sidebar-width)' }}

@@ -1,17 +1,26 @@
 import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
 
+export const resumeColors = {
+  canvas: '#1a1919',
+  sidebar: '#1b1725',
+  accent: '#c38beb',
+  ink: '#ded5e2',
+  muted: '#b9afc3',
+  line: '#39313f',
+};
+
 export const system = createSystem(
   defaultConfig,
   defineConfig({
     theme: {
       tokens: {
         colors: {
-          canvas: { value: '#1a1919' },
-          sidebar: { value: '#1b1725' },
-          accent: { value: '#c38beb' },
-          ink: { value: '#ded5e2' },
-          muted: { value: '#b9afc3' },
-          line: { value: '#39313f' },
+          canvas: { value: resumeColors.canvas },
+          sidebar: { value: resumeColors.sidebar },
+          accent: { value: resumeColors.accent },
+          ink: { value: resumeColors.ink },
+          muted: { value: resumeColors.muted },
+          line: { value: resumeColors.line },
         },
         fonts: {
           body: { value: '"Fira Sans", system-ui, sans-serif' },
