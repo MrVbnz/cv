@@ -14,7 +14,7 @@ export function Skills() {
             {skill.groups.map((group, index) => (
               <Box key={index}>
                 {group.title && (
-                  <Text fontWeight="bold" color="accent" mb="2">
+                  <Text fontSize="sm" fontWeight="medium" color="muted" mb="2">
                     {group.title}
                   </Text>
                 )}

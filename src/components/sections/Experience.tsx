@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Link, Stack, Text } from '@chakra-ui/react';
 import { useLocale } from '../../i18n/LocaleProvider';
 
 export function Experience() {
@@ -17,7 +17,9 @@ export function Experience() {
               {job.role}
             </Heading>
             <Text color="muted" mt="2">
-              {job.company}
+              <Link href={job.companyUrl} color="inherit" _hover={{ color: 'accent' }}>
+                {job.company}
+              </Link>
             </Text>
           </Box>
           <Text color="accent" flexShrink="0">

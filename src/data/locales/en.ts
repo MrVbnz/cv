@@ -2,9 +2,9 @@ import type { ResumeData } from '../types';
 
 export default {
   meta: {
-    title: 'Efremov Dmitry CV',
+    title: 'Dmitry Efremov — CV',
     description:
-      'I am Dmitry Efremov, a dedicated software developer and team leader with a strong technical foundation in Unity, C# and full-stack development. My expertise spans VR development, backend systems, and web applications, with hands-on experience in technologies like Unity,  ASP.NET, EF Core and React.',
+      'I am Dmitry Efremov, a Unity developer with team leadership experience. I develop VR projects, gameplay systems, and 3D editors, working with procedural geometry, shaders, VFX, and optimization. I also have full-stack development experience with ASP.NET, EF Core, and React.',
   },
   ui: {
     navigation: 'Resume navigation',
@@ -35,9 +35,9 @@ export default {
     surname: 'Efremov',
     givenName: 'Dmitry',
     email: 'd.efremov2001@mail.ru',
-    location: 'Remote, Open to relocation',
+    location: 'Yekaterinburg · remote · open to relocation',
     summary:
-      'I am Dmitry Efremov, a dedicated software developer and team leader with a strong technical foundation in Unity, C# and full-stack development. My expertise spans VR development, backend systems, and web applications, with hands-on experience in technologies like Unity,  ASP.NET, EF Core and React.',
+      'I am Dmitry Efremov, a Unity developer with team leadership experience. I develop VR projects, gameplay systems, and 3D editors, working with procedural geometry, shaders, VFX, and optimization. I also have full-stack development experience with ASP.NET, EF Core, and React.',
     social: [
       {
         label: 'GitHub',
@@ -59,7 +59,7 @@ export default {
   skills: [
     {
       id: 'technical',
-      title: 'Hard',
+      title: 'Technical Skills',
       groups: [
         {
           title: 'Expert',
@@ -78,26 +78,48 @@ export default {
         },
         {
           title: 'Intermediate',
-          items: ['C/C++', 'Pure JavaScript', 'Python', 'Java', 'WPF', 'Windows Forms'],
+          items: ['C/C++', 'JavaScript', 'Python', 'Java', 'WPF', 'Windows Forms'],
         },
       ],
     },
     {
       id: 'unity-assets',
-      title: 'Unity Assets',
+      title: 'Unity Libraries and Tools',
       groups: [
         {
-          items: ['Zenject', 'LeoECS', 'DOTween', 'UniTask', 'BNG VR Interaction Framework'],
+          items: [
+            'Zenject',
+            'VContainer',
+            'Mirror',
+            'DOTween',
+            'UniTask',
+            'BNG VR Interaction Framework',
+          ],
+        },
+      ],
+    },
+    {
+      id: '3d-development',
+      title: '3D and Gameplay Systems',
+      groups: [
+        {
+          items: [
+            'Matrix transformations and contour geometry',
+            'Procedural mesh generation',
+            'Component-based architecture and deterministic combat logic',
+            'Shaders, VFX, and graphics optimization',
+            'Unity Director and playback control',
+          ],
         },
       ],
     },
     {
       id: 'teamwork',
-      title: 'Soft',
+      title: 'Teamwork',
       groups: [
         {
           items: [
-            'Strong communication skills',
+            'Team communication',
             'Team management, task decomposition and delegation',
             'Training and onboarding new team members',
           ],
@@ -106,61 +128,92 @@ export default {
     },
     {
       id: '3d-tools',
-      title: 'Other',
+      title: '3D Tools',
       groups: [
         {
-          items: ['Cinema 4d', 'Blender'],
+          items: ['Cinema 4D', 'Blender'],
         },
       ],
     },
   ],
   experience: [
     {
+      id: 'jetstyle',
+      role: 'Unity developer',
+      company: 'JetStyle',
+      companyUrl: 'https://jet.style/',
+      period: 'September 2026 — Present',
+    },
+    {
       id: 'ceramic-3d',
       role: 'Unity developer',
-      company: 'Ceramic 3d',
-      period: 'September 2024 - Present',
+      company: 'Ceramic 3D',
+      companyUrl: 'https://www.ceramic3d.com/',
+      period: 'September 2024 — August 2026',
     },
     {
       id: 'novatrans',
       role: 'Unity VR developer, team lead',
       company: 'NovATrans',
-      period: 'September 2023 – September 2024',
+      companyUrl: 'https://npcat.ru/',
+      period: 'September 2023 — September 2024',
     },
   ],
   projects: [
     {
-      id: 'personal',
-      title: 'University / Personal Projects',
+      id: 'jetstyle',
+      title: 'JetStyle',
       items: [
         {
-          id: 'graph-editor',
-          title: 'Online Real-Time Graph Editor (Fullstack)',
-          technologies: [
-            {
-              label: 'Backend',
-              value: 'ASP.NET, EF Core, SignalR',
-            },
-            {
-              label: 'Frontend',
-              value: 'React (TypeScript), Bootstrap',
-            },
-          ],
+          id: 'mobile-multiplayer-rts',
+          title: 'Mobile Multiplayer RTS',
+          technologies: [{ label: 'Technologies', value: 'Unity, C#' }],
           paragraphs: [
-            'Developed a collaborative graph editor supporting real-time, multi-user editing similar to Google Docs. Primarily worked on backend architecture and database integration, occasionally updating the frontend to align with API changes.',
+            'Refactored the unit assembly system to introduce a component-based model. Contributed to refactoring the combat system, achieving deterministic battles. Added a new game mode based on these changes.',
+            'Updated the UI, added a sound system, and ported features from the previous project iteration.',
           ],
         },
         {
-          id: 'cloud-functions',
-          title: 'Multi-Target Cloud Functions Runner (Backend)',
+          id: 'large-scale-vr-attraction',
+          title: 'Large-Scale VR Attraction',
           technologies: [
-            {
-              label: 'Backend',
-              value: 'Flask-RESTful, MongoDB',
-            },
+            { label: 'Technologies', value: 'Unity, C#, Unity Director, VFX, shaders' },
           ],
           paragraphs: [
-            'Built a service that integrates multiple cloud function providers (AWS, Yandex, Sber, Selectel) into a unified REST API. The service supports versioning, uploading, and deploying functions, automatically adapting them to provider-specific formats.',
+            'Prototyped mechanics and visual effects, built demo scenes, and refined prototypes through short feedback-driven iterations. Integrated prototypes into production scenarios.',
+            'Worked with Unity Director on slow motion, playback control, and a custom sound system. Configured graphics and shaders and worked on optimization.',
+          ],
+        },
+        {
+          id: 'android-app-maintenance',
+          title: 'Android Application Maintenance',
+          technologies: [{ label: 'Technologies', value: 'Android, .NET MAUI, KCP Protocol' }],
+          paragraphs: [
+            'Fixed application crashes, multithreading bugs, and networking issues in an existing project.',
+          ],
+        },
+        {
+          id: 'vr-headset-api-research',
+          title: 'VR Headset API Research',
+          technologies: [{ label: 'Focus', value: 'VR, VR headset APIs' }],
+          paragraphs: ['Researched new VR headset APIs and their potential use in projects.'],
+        },
+      ],
+    },
+    {
+      id: 'ceramic-3d',
+      title: 'Ceramic 3D',
+      items: [
+        {
+          id: 'interior-furniture-editor',
+          title: 'Interior, Furniture, and Storage System Editor',
+          technologies: [
+            { label: 'Technologies', value: 'Unity, C#, Delphi, SQLite, Addressables' },
+          ],
+          paragraphs: [
+            'Developed features in an existing editor, working with legacy code and applying matrix transformations and contour geometry. Updated the importer for a proprietary model format, and refactored and extended the spatial measurement system.',
+            'Fixed numerous procedural mesh generation bugs. Used Delphi knowledge to understand how to work with an undocumented legacy database.',
+            'Refactored the system for loading available parts from local and remote databases.',
           ],
         },
       ],
@@ -187,7 +240,7 @@ export default {
             },
           ],
           paragraphs: [
-            'Contributed to an open-world multiplayer project with VR and desktop support. Initially focused on maintaining and enhancing backend functionality, later worked on frontend updates. Ported the infrastructure from an IIS Windows server to Docker Compose for improved deployment.',
+            'Contributed to a multiplayer project with VR and desktop support. Initially focused on maintaining and enhancing backend functionality, later worked on frontend updates. Ported the infrastructure from an IIS Windows server to Docker Compose for improved deployment.',
           ],
         },
         {
@@ -200,7 +253,7 @@ export default {
             },
             {
               label: 'Frontend',
-              value: 'Pure JavaScript with Three.js and AR.js',
+              value: 'JavaScript with Three.js and AR.js',
             },
           ],
           paragraphs: [
@@ -239,7 +292,7 @@ export default {
           technologies: [
             {
               label: 'Technologies',
-              value: 'Unity, Custom Node-Based Scenario Editor, Physical Fire Simulation',
+              value: 'Unity, Custom Scenario Editor, Physical Fire Simulation',
             },
           ],
           paragraphs: [
@@ -250,25 +303,64 @@ export default {
         },
       ],
     },
+    {
+      id: 'personal',
+      title: 'University / Personal Projects',
+      items: [
+        {
+          id: 'graph-editor',
+          title: 'Online Real-Time Graph Editor (Fullstack)',
+          technologies: [
+            {
+              label: 'Backend',
+              value: 'ASP.NET, EF Core, SignalR',
+            },
+            {
+              label: 'Frontend',
+              value: 'React (TypeScript), Bootstrap',
+            },
+          ],
+          paragraphs: [
+            'Developed a collaborative graph editor supporting real-time, multi-user editing similar to Google Docs. Primarily worked on backend architecture and database integration, occasionally updating the frontend to align with API changes.',
+          ],
+        },
+        {
+          id: 'cloud-functions',
+          title: 'Multi-Target Cloud Functions Runner (Backend)',
+          technologies: [
+            {
+              label: 'Backend',
+              value: 'Flask-RESTful, MongoDB',
+            },
+          ],
+          paragraphs: [
+            'Built a service that integrates multiple cloud function providers (AWS, Yandex, Sber, Selectel) into a unified REST API. The service supports versioning, uploading, and deploying functions, automatically adapting them to provider-specific formats.',
+          ],
+        },
+      ],
+    },
   ],
   interests: [
     {
       id: 'game-development',
-      title: 'Game mechanics / Shader developement',
+      title: 'Game Mechanics / Shader Development',
+      description: 'I enjoy creating unique gameplay mechanics and visual effects.',
+    },
+    {
+      id: 'low-level-programming',
+      title: 'Low-Level Programming',
       description:
-        "I am having fun developing unique game mechanics or visual effects even if it isn't going to be released.",
+        'I implement algorithms that interest me in C/C++ to better understand how they work and how to optimize them.',
     },
     {
       id: 'outdoors',
       title: 'Outdoor Activities',
-      description:
-        'Passionate about tracking, hiking, and cycling, which allow me to stay active and explore nature.',
+      description: 'I enjoy trekking, hiking, and cycling.',
     },
     {
       id: 'miniatures',
       title: '3D Printing and Miniature Painting',
-      description:
-        'Enthusiast of 3D printing, where I design and print miniatures, which I then enjoy painting and customizing.',
+      description: 'I enjoy 3D printing, creating and painting miniatures.',
     },
   ],
 } satisfies ResumeData;

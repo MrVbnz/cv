@@ -27,7 +27,7 @@ export interface ResumeData {
     title: string;
     groups: { title?: string; items: string[] }[];
   }[];
-  experience: { id: string; role: string; company: string; period: string }[];
+  experience: { id: string; role: string; company: string; companyUrl: string; period: string }[];
   projects: {
     id: string;
     title: string;
