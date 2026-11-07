@@ -1,7 +1,9 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { resumes } from '../data';
-import type { Locale, ResumeData } from '../data/types';
+import type { Locale, ResumeData, SectionId } from '../data/types';
+import { getActiveSection } from '../hooks/useActiveSection';
 import { localeStorageKey, resolveLocale } from './locale';
+import { scrollToElement } from '../utils/scrollToElement';
 
 interface LocaleContextValue {
   locale: Locale;
@@ -12,12 +14,27 @@ interface LocaleContextValue {
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>(() => {
+  const sectionToAlign = useRef<SectionId | null>(null);
+  const [locale, updateLocale] = useState<Locale>(() => {
     let saved = null;
     try { saved = localStorage.getItem(localeStorageKey); } catch { /* Storage can be disabled. */ }
     return resolveLocale(saved, navigator.languages);
   });
   const data = resumes[locale];
+
+  function setLocale(nextLocale: Locale) {
+    if (nextLocale === locale) return;
+    // Capture the active section before translated content changes the layout.
+    sectionToAlign.current = getActiveSection();
+    updateLocale(nextLocale);
+  }
+
+  useLayoutEffect(() => {
+    const id = sectionToAlign.current;
+    sectionToAlign.current = null;
+    if (!id) return;
+    scrollToElement(id);
+  }, [locale]);
 
   useEffect(() => {
     document.documentElement.lang = locale;

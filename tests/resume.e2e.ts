@@ -71,7 +71,7 @@ test('mobile menu closes after navigation and has no horizontal overflow', async
   await page.getByRole('button', { name: 'RU', exact: true }).click();
   await page.getByRole('link', { name: 'Проекты', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Переключить навигацию' })).toHaveAttribute('aria-expanded', 'false');
-  await expect(page).toHaveURL(/#projects$/);
+  await expect(page).toHaveURL(/\/cv\/$/);
   await expect(page.getByTestId('menu-backdrop')).toBeHidden();
   expect((await page.locator('#projects').boundingBox())!.y).toBe(header!.height);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
@@ -89,4 +89,24 @@ test('detects Russian and works with blocked storage', async ({ browser }) => {
   await page.getByRole('button', { name: 'EN', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await context.close();
+});
+
+test('language changes align the active section like menu navigation', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const viewport of [{ width: 1920, height: 1080 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('./');
+    await page.evaluate(() => document.fonts.ready);
+    for (const id of ['experience', 'skills', 'projects']) {
+      await page.locator(`#${id}`).evaluate(section => section.scrollIntoView({ block: 'start', behavior: 'instant' }));
+      for (const code of ['ru', 'en']) {
+        await page.getByRole('button', { name: code.toUpperCase(), exact: true }).click();
+        await expect.poll(() => page.locator(`#${id}`).evaluate(section => {
+          const bounds = section.getBoundingClientRect();
+          const headerHeight = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+          return Math.abs(bounds.top - headerHeight);
+        })).toBeLessThanOrEqual(1);
+      }
+    }
+  }
 });

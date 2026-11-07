@@ -5,6 +5,7 @@ import { useLocale } from '../i18n/LocaleProvider';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { Hamburger } from './Hamburger';
+import { scrollToElement } from '../utils/scrollToElement';
 
 export function Navigation() {
   const { data } = useLocale();
@@ -38,7 +39,8 @@ export function Navigation() {
           </Button>
           <LanguageSwitcher />
         </Flex>
-        <Link href="#about" display={{ base: 'none', lg: 'block' }} borderRadius="full">
+        <Link href="#about" display={{ base: 'none', lg: 'block' }} borderRadius="full"
+          onClick={event => { event.preventDefault(); scrollToElement('about'); }}>
           <Image src={`${import.meta.env.BASE_URL}assets/img/profile.jpg`} alt={data.ui.portraitAlt}
             boxSize="36" objectFit="cover" borderRadius="full" borderWidth="6px" borderColor="line" />
         </Link>
@@ -53,7 +55,11 @@ export function Navigation() {
           maxH={{ base: 'calc(100dvh - var(--header-height))', lg: 'none' }} overflowY="auto">
           {sectionIds.map(id => (
             <Link key={id} href={`#${id}`} color={active === id ? 'accent' : 'muted'} fontWeight="bold"
-              aria-current={active === id ? 'location' : undefined} onClick={() => setOpen(false)}>
+              aria-current={active === id ? 'location' : undefined} onClick={event => {
+                event.preventDefault();
+                setOpen(false);
+                scrollToElement(id);
+              }}>
               {data.ui.sections[id]}
             </Link>
           ))}
