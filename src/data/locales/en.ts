@@ -9,6 +9,7 @@ export default {
     "navigation": "Resume navigation",
     "toggleNavigation": "Toggle navigation",
     "language": "Language",
+    "contacts": "Contact links",
     "skipToContent": "Skip to content",
     "portraitAlt": "Dmitry Efremov",
     "sections": {
@@ -37,15 +38,18 @@ export default {
     "summary": "I am Dmitry Efremov, a dedicated software developer and team leader with a strong technical foundation in Unity, C# and full-stack development. My expertise spans VR development, backend systems, and web applications, with hands-on experience in technologies like Unity,  ASP.NET, EF Core and React.",
     "social": [
       {
-        "label": "Telegram",
-        "href": "https://t.me/mrvbnz"
-      },
-      {
         "label": "GitHub",
+        "kind": "github",
         "href": "https://github.com/MrVbnz"
       },
       {
+        "label": "Telegram",
+        "kind": "telegram",
+        "href": "https://t.me/mrvbnz"
+      },
+      {
         "label": "LinkedIn",
+        "kind": "linkedin",
         "href": "https://www.linkedin.com/in/dmitry-efr/"
       }
     ]

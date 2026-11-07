@@ -14,8 +14,9 @@ export function App() {
     <Link href="#main-content" position="fixed" top="-20" left="4" zIndex="20" bg="sidebar" p="3"
       color="accent" _focus={{ top: '4' }}>{data.ui.skipToContent}</Link>
     <Navigation />
-    <Box as="main" id="main-content" tabIndex={-1} ml={{ lg: '17rem' }} pt={{ base: '16', lg: '0' }} px={{ base: '6', md: '12', xl: '20' }}>
-      <Box maxW="70rem" mx="auto">
+    <Box as="main" id="main-content" tabIndex={-1} pt="var(--header-height)"
+      ml={{ lg: '17rem' }} px={{ base: '6', md: '12', xl: '20' }}>
+      <Box maxW="70rem">
         <ResumeSection id="about"><About /></ResumeSection>
         <ResumeSection id="skills"><Skills /></ResumeSection>
         <ResumeSection id="experience"><Experience /></ResumeSection>

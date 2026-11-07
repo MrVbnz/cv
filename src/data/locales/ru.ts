@@ -9,6 +9,7 @@ export default {
     "navigation": "Навигация по резюме",
     "toggleNavigation": "Переключить навигацию",
     "language": "Язык",
+    "contacts": "Способы связи",
     "skipToContent": "Перейти к содержанию",
     "portraitAlt": "Дмитрий Ефремов",
     "sections": {
@@ -37,15 +38,18 @@ export default {
     "summary": "Я Дмитрий Ефремов, разработчик программного обеспечения, тимлид. Занимаюсь VR, fullstack разработкой с практическим опытом работы Unity, ASP.NET, EF Core и React.",
     "social": [
       {
-        "label": "Telegram",
-        "href": "https://t.me/mrvbnz"
-      },
-      {
         "label": "GitHub",
+        "kind": "github",
         "href": "https://github.com/MrVbnz"
       },
       {
+        "label": "Telegram",
+        "kind": "telegram",
+        "href": "https://t.me/mrvbnz"
+      },
+      {
         "label": "LinkedIn",
+        "kind": "linkedin",
         "href": "https://www.linkedin.com/in/dmitry-efr/"
       }
     ]

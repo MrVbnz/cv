@@ -12,13 +12,17 @@ export const system = createSystem(defaultConfig, defineConfig({
         line: { value: '#39313f' },
       },
       fonts: {
-        body: { value: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
-        heading: { value: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
+        body: { value: '"Fira Sans", system-ui, sans-serif' },
+        heading: { value: '"Fira Sans", system-ui, sans-serif' },
       },
     },
   },
   globalCss: {
-    html: { scrollBehavior: 'smooth', scrollPaddingTop: { base: '5rem', lg: '2rem' }, _motionReduce: { scrollBehavior: 'auto' } },
+    html: {
+      '--header-height': { base: '5.5rem', lg: '0px' },
+      scrollBehavior: 'smooth', scrollPaddingTop: 'var(--header-height)',
+      _motionReduce: { scrollBehavior: 'auto' },
+    },
     body: { bg: 'canvas', color: 'ink' },
     '::selection': { bg: 'accent', color: 'sidebar' },
     ':focus-visible': { outline: '2px solid', outlineColor: 'accent', outlineOffset: '4px' },

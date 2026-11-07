@@ -47,15 +47,33 @@ test('switches all sections in place and remembers the selected language', async
 
 test('mobile menu closes after navigation and has no horizontal overflow', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
   const toggle = page.getByRole('button', { name: 'Toggle navigation' });
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  expect((await toggle.boundingBox())!.x).toBeGreaterThan(300);
+  expect((await toggle.boundingBox())!.x).toBeLessThan(40);
+  await expect(page.getByRole('button', { name: 'RU', exact: true })).toBeVisible();
+  const language = await page.getByRole('group', { name: 'Language', exact: true }).boundingBox();
+  expect(language!.x).toBeGreaterThan(240);
+  const header = await page.locator('nav').boundingBox();
+  const firstSection = await page.locator('#about').boundingBox();
+  expect(firstSection!.y).toBe(header!.height);
+  expect(firstSection!.height + header!.height).toBe(844);
+  await toggle.click();
+  await expect(page.getByTestId('menu-backdrop')).toBeVisible();
+  await page.getByTestId('menu-backdrop').click({ position: { x: 200, y: 700 } });
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.getByTestId('menu-backdrop')).toBeHidden();
+  await toggle.click();
+  await page.keyboard.press('Escape');
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await toggle.click();
   await page.getByRole('button', { name: 'RU', exact: true }).click();
   await page.getByRole('link', { name: 'Проекты', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Переключить навигацию' })).toHaveAttribute('aria-expanded', 'false');
   await expect(page).toHaveURL(/#projects$/);
+  await expect(page.getByTestId('menu-backdrop')).toBeHidden();
+  expect((await page.locator('#projects').boundingBox())!.y).toBe(header!.height);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: 'test-results/mobile.png' });
 });

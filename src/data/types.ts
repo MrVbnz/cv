@@ -1,6 +1,7 @@
 export const sectionIds = ['about', 'skills', 'experience', 'projects', 'interests'] as const;
 export type SectionId = (typeof sectionIds)[number];
 export type Locale = 'en' | 'ru';
+export type ContactKind = 'github' | 'telegram' | 'linkedin';
 
 export interface ResumeData {
   meta: { title: string; description: string };
@@ -8,6 +9,7 @@ export interface ResumeData {
     navigation: string;
     toggleNavigation: string;
     language: string;
+    contacts: string;
     skipToContent: string;
     portraitAlt: string;
     sections: Record<SectionId, string>;
@@ -19,7 +21,7 @@ export interface ResumeData {
     email: string;
     location: string;
     summary: string;
-    social: { label: string; href: string }[];
+    social: { kind: ContactKind; label: string; href: string }[];
   };
   skills: {
     id: string;
