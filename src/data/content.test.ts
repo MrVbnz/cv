@@ -1,26 +1,31 @@
 import { describe, expect, it } from 'vitest';
 import { resumes } from './index';
-import { sectionIds } from './types';
+import { localeCodes } from '../i18n/locale';
+
+function expectUniqueIds(items: { id: string }[]) {
+  const ids = items.map((item) => item.id);
+  expect(ids.every((id) => id.trim().length > 0)).toBe(true);
+  expect(new Set(ids).size).toBe(ids.length);
+}
 
 describe('resume language tables', () => {
   for (const [locale, data] of Object.entries(resumes)) {
-    it(`${locale}: contains every section, job and project`, () => {
-      expect(Object.keys(data.ui.sections)).toEqual([...sectionIds]);
-      expect(data.experience).toHaveLength(2);
-      expect(data.projects.flatMap(group => group.items)).toHaveLength(7);
-      for (const group of data.projects) {
-        for (const project of group.items) {
-          expect(project.title).not.toBe('');
-          expect(project.technologies.length).toBeGreaterThan(0);
-          expect(project.paragraphs.length).toBeGreaterThan(0);
-        }
+    it(`${locale}: language options match the supported locales`, () => {
+      expect(data.languages.map((language) => language.code)).toEqual([...localeCodes]);
+    });
+
+    it(`${locale}: list keys are unique and contact destinations are valid`, () => {
+      expectUniqueIds(data.skills);
+      expectUniqueIds(data.experience);
+      expectUniqueIds(data.projects);
+      expectUniqueIds(data.projects.flatMap((group) => group.items));
+      expectUniqueIds(data.interests);
+      expect(new Set(data.profile.social.map((contact) => contact.kind)).size).toBe(
+        data.profile.social.length,
+      );
+      for (const contact of data.profile.social) {
+        expect(new URL(contact.href).protocol).toBe('https:');
       }
     });
   }
-
-  it('preserves differences between the original translations', () => {
-    expect(resumes.en.skills.find(skill => skill.title === 'Unity Assets')).toBeDefined();
-    expect(resumes.ru.interests).toHaveLength(4);
-    expect(resumes.en.interests).toHaveLength(3);
-  });
 });

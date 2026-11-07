@@ -8,7 +8,9 @@ import { system } from './theme';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ChakraProvider value={system}>
-      <LocaleProvider><App /></LocaleProvider>
+      <LocaleProvider>
+        <App />
+      </LocaleProvider>
     </ChakraProvider>
   </StrictMode>,
 );

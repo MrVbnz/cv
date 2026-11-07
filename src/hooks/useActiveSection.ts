@@ -1,15 +1,6 @@
 import { useEffect, useState } from 'react';
 import { sectionIds, type SectionId } from '../data/types';
-
-export function getActiveSection(): SectionId {
-  const offset = Math.min(window.innerHeight * 0.3, 200);
-  let current: SectionId = 'about';
-  for (const id of sectionIds) {
-    if ((document.getElementById(id)?.getBoundingClientRect().top ?? Infinity) <= offset) current = id;
-  }
-  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) current = 'interests';
-  return current;
-}
+import { getActiveSection } from '../utils/getActiveSection';
 
 export function useActiveSection() {
   const [active, setActive] = useState<SectionId>('about');
@@ -20,9 +11,15 @@ export function useActiveSection() {
     update();
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
+    const observer = new ResizeObserver(update);
+    for (const id of sectionIds) {
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
+    }
     return () => {
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
+      observer.disconnect();
     };
   }, []);
   return active;

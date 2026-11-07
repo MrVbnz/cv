@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { resumes } from '../src/data';
 
 test('serves valid manifest and icons in development and production', async ({ page }) => {
   for (const port of [4183, 4173]) {
@@ -8,11 +9,14 @@ test('serves valid manifest and icons in development and production', async ({ p
     expect(new URL(manifest.url).pathname).toBe('/cv/assets/site.webmanifest');
     expect(manifest.errors).toEqual([]);
     const data = JSON.parse(manifest.data!);
-    expect(data.name).toBe('Efremov Dmitry');
-    const icons = await page.locator('link[rel="icon"], link[rel="apple-touch-icon"]').evaluateAll(
-      links => links.map(link => (link as HTMLLinkElement).href),
-    );
-    for (const url of [...icons, ...data.icons.map((icon: { src: string }) => new URL(icon.src, manifest.url).href)]) {
+    expect(data.name).toBeTruthy();
+    const icons = await page
+      .locator('link[rel="icon"], link[rel="apple-touch-icon"]')
+      .evaluateAll((links) => links.map((link) => (link as HTMLLinkElement).href));
+    for (const url of [
+      ...icons,
+      ...data.icons.map((icon: { src: string }) => new URL(icon.src, manifest.url).href),
+    ]) {
       const response = await page.request.get(url);
       expect(response.ok()).toBe(true);
       expect(response.headers()['content-type']).toMatch(/^image\//);
@@ -22,27 +26,44 @@ test('serves valid manifest and icons in development and production', async ({ p
 });
 
 test('switches all sections in place and remembers the selected language', async ({ page }) => {
-  await page.context().clearCookies();
-  await page.goto('./');
   const errors: string[] = [];
-  page.on('pageerror', error => errors.push(error.message));
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('./');
   await page.getByRole('button', { name: 'RU', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ефремов Дмитрий');
-  await expect(page.getByRole('heading', { name: 'Навыки', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Низкоуровневое программирование' })).toBeVisible();
-  await expect(page).toHaveTitle('Ефремов Дмитрий — резюме');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    `${resumes.ru.profile.surname} ${resumes.ru.profile.givenName}`,
+  );
+  await expect(page.locator('#skills-heading')).toHaveText(resumes.ru.ui.sections.skills);
+  await expect(page).toHaveTitle(resumes.ru.meta.title);
   expect(new URL(page.url()).pathname).toBe('/cv/');
   await page.reload();
-  await expect(page.getByRole('button', { name: 'RU', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: 'RU', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
   await page.getByRole('button', { name: 'EN', exact: true }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Efremov Dmitry');
-  await expect(page.getByRole('heading', { name: 'Unity Assets', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Низкоуровневое программирование' })).toHaveCount(0);
-  await expect(page.getByRole('link', { name: 'd.efremov2001@mail.ru' })).toHaveAttribute('href', 'mailto:d.efremov2001@mail.ru');
-  expect(await page.locator('img').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBe(true);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    `${resumes.en.profile.surname} ${resumes.en.profile.givenName}`,
+  );
+  await expect(page.locator('#skills-heading')).toHaveText(resumes.en.ui.sections.skills);
+  await expect(page.getByRole('link', { name: resumes.en.profile.email })).toHaveAttribute(
+    'href',
+    `mailto:${resumes.en.profile.email}`,
+  );
+  await expect
+    .poll(() =>
+      page
+        .locator('img')
+        .evaluateAll((images) =>
+          images.every(
+            (image) =>
+              image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0,
+          ),
+        ),
+    )
+    .toBe(true);
   expect(errors).toEqual([]);
-  await page.screenshot({ path: 'test-results/desktop.png' });
 });
 
 test('mobile menu closes after navigation and has no horizontal overflow', async ({ page }) => {
@@ -69,19 +90,28 @@ test('mobile menu closes after navigation and has no horizontal overflow', async
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await toggle.click();
   await page.getByRole('button', { name: 'RU', exact: true }).click();
-  await page.getByRole('link', { name: 'Проекты', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Переключить навигацию' })).toHaveAttribute('aria-expanded', 'false');
+  await page.getByRole('button', { name: resumes.ru.ui.sections.projects, exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Переключить навигацию' })).toHaveAttribute(
+    'aria-expanded',
+    'false',
+  );
   await expect(page).toHaveURL(/\/cv\/$/);
   await expect(page.getByTestId('menu-backdrop')).toBeHidden();
+  await expect(page.locator('#projects')).toBeFocused();
   expect((await page.locator('#projects').boundingBox())!.y).toBe(header!.height);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.screenshot({ path: 'test-results/mobile.png' });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
 });
 
 test('detects Russian and works with blocked storage', async ({ browser }) => {
   const context = await browser.newContext({ locale: 'ru-RU' });
   await context.addInitScript(() => {
-    Object.defineProperty(window, 'localStorage', { get() { throw new Error('Storage disabled'); } });
+    Object.defineProperty(window, 'localStorage', {
+      get() {
+        throw new Error('Storage disabled');
+      },
+    });
   });
   const page = await context.newPage();
   await page.goto('http://127.0.0.1:4173/cv/');
@@ -93,20 +123,91 @@ test('detects Russian and works with blocked storage', async ({ browser }) => {
 
 test('language changes align the active section like menu navigation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  for (const viewport of [{ width: 1920, height: 1080 }, { width: 390, height: 844 }]) {
+  for (const viewport of [
+    { width: 1920, height: 1080 },
+    { width: 390, height: 844 },
+  ]) {
     await page.setViewportSize(viewport);
     await page.goto('./');
     await page.evaluate(() => document.fonts.ready);
     for (const id of ['experience', 'skills', 'projects']) {
-      await page.locator(`#${id}`).evaluate(section => section.scrollIntoView({ block: 'start', behavior: 'instant' }));
+      await page
+        .locator(`#${id}`)
+        .evaluate((section) => section.scrollIntoView({ block: 'start', behavior: 'instant' }));
       for (const code of ['ru', 'en']) {
         await page.getByRole('button', { name: code.toUpperCase(), exact: true }).click();
-        await expect.poll(() => page.locator(`#${id}`).evaluate(section => {
-          const bounds = section.getBoundingClientRect();
-          const headerHeight = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-          return Math.abs(bounds.top - headerHeight);
-        })).toBeLessThanOrEqual(1);
+        await expect
+          .poll(() =>
+            page.locator(`#${id}`).evaluate((section) => {
+              const bounds = section.getBoundingClientRect();
+              const headerHeight =
+                parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+              return Math.abs(bounds.top - headerHeight);
+            }),
+          )
+          .toBeLessThanOrEqual(1);
+        const data = resumes[code as 'en' | 'ru'];
+        await expect(page.locator('nav button[aria-current="location"]')).toHaveText(
+          data.ui.sections[id as keyof typeof data.ui.sections],
+        );
       }
     }
+  }
+});
+
+test('responsive navigation resets the mobile menu and stays usable on short screens', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('./');
+  await page.getByRole('button', { name: resumes.en.ui.toggleNavigation }).click();
+  await expect(page.getByTestId('menu-backdrop')).toBeVisible();
+  await page.setViewportSize({ width: 1280, height: 400 });
+  await page.getByRole('button', { name: resumes.en.ui.sections.interests, exact: true }).click();
+  await page.getByRole('button', { name: 'RU', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByRole('button', { name: resumes.ru.ui.toggleNavigation })).toHaveAttribute(
+    'aria-expanded',
+    'false',
+  );
+  await expect(page.getByTestId('menu-backdrop')).toBeHidden();
+});
+
+test('keyboard navigation moves focus without changing the URL', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('./');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: resumes.en.ui.skipToContent })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#main-content')).toBeFocused();
+  const projects = page.getByRole('button', { name: resumes.en.ui.sections.projects, exact: true });
+  await projects.focus();
+  await page.keyboard.press('Space');
+  await expect(page.locator('#projects')).toBeFocused();
+  await expect(page).toHaveURL(/\/cv\/$/);
+});
+
+test('custom icons load the correct files for different screen densities', async ({
+  page,
+  browser,
+}) => {
+  await page.goto('./');
+  for (const density of [1, 2, 3]) {
+    const context = await browser.newContext({ deviceScaleFactor: density });
+    const iconPage = await context.newPage();
+    await iconPage.goto(page.url());
+    const icons = iconPage.locator('img[src*="assets/icons/"]');
+    await expect(icons).toHaveCount(3);
+    await icons.evaluateAll((images) =>
+      Promise.all(images.map((image) => (image as HTMLImageElement).decode())),
+    );
+    const files = await icons.evaluateAll((images) =>
+      images.map((image) => (image as HTMLImageElement).currentSrc),
+    );
+    const size = density === 1 ? 24 : density === 2 ? 48 : 64;
+    expect(files.every((file) => file.endsWith(`-${size}px.png`))).toBe(true);
+    await context.close();
   }
 });

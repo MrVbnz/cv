@@ -1,6 +1,5 @@
 export const sectionIds = ['about', 'skills', 'experience', 'projects', 'interests'] as const;
 export type SectionId = (typeof sectionIds)[number];
-export type Locale = 'en' | 'ru';
 export type ContactKind = 'github' | 'telegram' | 'linkedin';
 
 export interface ResumeData {
@@ -41,3 +40,4 @@ export interface ResumeData {
   }[];
   interests: { id: string; title: string; description: string }[];
 }
+import type { Locale } from '../i18n/locale';
