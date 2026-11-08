@@ -17,6 +17,10 @@ export function ScrollGradient() {
     const draw = () => {
       frame = 0;
       if (document.hidden || contextLost || !renderer) return;
+      // Blend the horizontal footprint between portrait 9:16 and landscape 16:9.
+      const aspectRatio = window.innerWidth / Math.max(1, window.innerHeight);
+      const landscapeWeight = Math.max(0, Math.min(1, (aspectRatio - 9 / 16) / (16 / 9 - 9 / 16)));
+      surface.style.width = `${70 - 28 * landscapeWeight}%`;
       const distance = document.documentElement.scrollHeight - window.innerHeight;
       const progress = motion.matches || distance <= 0 ? 0 : window.scrollY / distance;
       renderer.draw(Math.max(0, Math.min(1, progress)));

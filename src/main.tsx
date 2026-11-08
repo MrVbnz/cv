@@ -4,6 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { App } from './App';
 import { LocaleProvider } from './i18n/LocaleProvider';
 import { system } from './theme';
+import './print.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

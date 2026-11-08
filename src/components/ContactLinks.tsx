@@ -15,7 +15,7 @@ export function ContactLinks() {
   } = useLocale();
 
   return (
-    <HStack role="group" aria-label={ui.contacts} flexWrap="wrap" gap="3">
+    <HStack className="contact-links" role="group" aria-label={ui.contacts} flexWrap="wrap" gap="3">
       {profile.social.map((contact) => (
         <Link
           key={contact.kind}

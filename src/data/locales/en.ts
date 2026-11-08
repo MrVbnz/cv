@@ -2,7 +2,7 @@ import type { ResumeData } from '../types';
 
 export default {
   meta: {
-    title: 'Dmitry Efremov — CV',
+    title: 'Efremov Dmitry',
     description:
       'I am Dmitry Efremov, a Unity developer with team leadership experience. I develop VR projects, gameplay systems, and 3D editors, working with procedural geometry, shaders, VFX, and optimization. I also have full-stack development experience with ASP.NET, EF Core, and React.',
   },

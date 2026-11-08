@@ -1,0 +1,121 @@
+@page {
+  margin: 15mm;
+}
+
+@media print {
+  :root {
+    --chakra-colors-canvas: #fff;
+    --chakra-colors-sidebar: #fff;
+    --chakra-colors-ink: #111;
+    --chakra-colors-muted: #444;
+    --chakra-colors-accent: #333;
+    --chakra-colors-line: #ccc;
+    --chakra-colors-gray-400: #444;
+    font-size: 11pt;
+  }
+
+  body {
+    background: #fff;
+    color: #111;
+  }
+
+  nav,
+  button,
+  [data-testid='menu-backdrop'],
+  canvas {
+    display: none !important;
+  }
+
+  #main-content {
+    margin: 0;
+    padding: 0;
+  }
+
+  #main-content > div {
+    max-width: none;
+  }
+
+  #main-content section {
+    display: block;
+    min-height: 0;
+    break-before: page;
+  }
+
+  #main-content section:first-child {
+    break-before: auto;
+  }
+
+  #main-content section::after {
+    display: none;
+  }
+
+  #main-content section > div {
+    padding-block: 0;
+  }
+
+  h1 {
+    font-size: 28pt !important;
+  }
+
+  h2 {
+    font-size: 20pt !important;
+    margin-bottom: 8mm;
+  }
+
+  h3 {
+    font-size: 14pt !important;
+  }
+
+  h4 {
+    font-size: 12pt !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid-page;
+  }
+
+  p,
+  li {
+    line-height: 1.45 !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  #skills > div > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6mm;
+  }
+
+  #skills > div > div > div,
+  #experience > div > div > div,
+  #interests > div > div > div,
+  article {
+    break-inside: avoid-page;
+  }
+
+  .contact-links[role='group'] {
+    display: block;
+  }
+
+  .contact-links a {
+    display: block;
+    min-height: 0;
+    margin-bottom: 2mm;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: inherit;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-links img {
+    display: none;
+  }
+
+  .contact-links a::after {
+    content: ': ' attr(href);
+  }
+}
