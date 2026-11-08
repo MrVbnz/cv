@@ -142,14 +142,14 @@ export default {
       role: 'Unity developer',
       company: 'JetStyle',
       companyUrl: 'https://jet.style/',
-      period: 'September 2026 — Present',
+      period: 'September 2025 — August 2026',
     },
     {
       id: 'ceramic-3d',
       role: 'Unity developer',
       company: 'Ceramic 3D',
       companyUrl: 'https://www.ceramic3d.com/',
-      period: 'September 2024 — August 2026',
+      period: 'September 2024 — August 2025',
     },
     {
       id: 'novatrans',
