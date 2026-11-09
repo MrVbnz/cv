@@ -1,27 +1,46 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { resumes } from '../data';
 import type { ResumeData } from '../data/types';
-import { localeStorageKey, resolveLocale, type Locale } from './locale';
+import { localeFromPath, localePath, localeStorageKey, type Locale } from './locale';
 
 interface LocaleContextValue {
   locale: Locale;
+  localized: boolean;
   setLocale: (locale: Locale) => void;
   data: ResumeData;
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>(() => {
-    let saved = null;
-    try {
-      saved = localStorage.getItem(localeStorageKey);
-    } catch {
-      /* Storage can be disabled. */
-    }
-    return resolveLocale(saved, navigator.languages);
-  });
+export function LocaleProvider({
+  children,
+  initialLocale,
+  localized,
+}: {
+  children: ReactNode;
+  initialLocale: Locale;
+  localized: boolean;
+}) {
+  const [locale, updateLocale] = useState(initialLocale);
   const data = resumes[locale];
+
+  function setLocale(next: Locale) {
+    if (localized && next !== locale) {
+      const { search, hash } = window.location;
+      window.history.pushState(null, '', `${localePath(next)}${search}${hash}`);
+    }
+    updateLocale(next);
+  }
+
+  useEffect(() => {
+    if (!localized) return;
+    function restoreLocale() {
+      const next = localeFromPath(window.location.pathname);
+      if (next) updateLocale(next);
+    }
+    window.addEventListener('popstate', restoreLocale);
+    return () => window.removeEventListener('popstate', restoreLocale);
+  }, [localized]);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -37,7 +56,9 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   }, [locale, data]);
 
   return (
-    <LocaleContext.Provider value={{ locale, setLocale, data }}>{children}</LocaleContext.Provider>
+    <LocaleContext.Provider value={{ locale, localized, setLocale, data }}>
+      {children}
+    </LocaleContext.Provider>
   );
 }
 

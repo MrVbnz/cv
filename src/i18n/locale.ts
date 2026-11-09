@@ -3,6 +3,17 @@ export type Locale = (typeof localeCodes)[number];
 
 export const localeStorageKey = 'cv.locale';
 
+export function localePath(locale: Locale) {
+  return `${import.meta.env.BASE_URL}${locale}/`;
+}
+
+export function localeFromPath(pathname: string) {
+  return localeCodes.find((locale) => {
+    const path = localePath(locale);
+    return pathname === path || pathname === `${path}index.html` || pathname === path.slice(0, -1);
+  });
+}
+
 export function resolveLocale(saved: string | null, languages: readonly string[]): Locale {
   const savedLocale = localeCodes.find((locale) => locale === saved);
   if (savedLocale) return savedLocale;

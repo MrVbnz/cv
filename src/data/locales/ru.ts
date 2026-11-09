@@ -15,7 +15,6 @@ export default {
     toggleNavigation: 'Переключить навигацию',
     language: 'Язык',
     contacts: 'Способы связи',
-    skipToContent: 'Перейти к содержанию',
     sections: {
       about: 'О себе',
       skills: 'Навыки',
@@ -309,7 +308,7 @@ export default {
             },
             {
               label: 'XR',
-              value: 'Valve OpenVR · переход на OpenXR и XR Interaction Toolkit',
+              value: 'OpenXR',
             },
           ],
           paragraphs: [

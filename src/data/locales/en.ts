@@ -15,7 +15,6 @@ export default {
     toggleNavigation: 'Toggle navigation',
     language: 'Language',
     contacts: 'Contact links',
-    skipToContent: 'Skip to content',
     sections: {
       about: 'About',
       skills: 'Skills',
@@ -309,7 +308,7 @@ export default {
             },
             {
               label: 'XR',
-              value: 'Valve OpenVR · migration to OpenXR and XR Interaction Toolkit',
+              value: 'OpenXR',
             },
           ],
           paragraphs: [

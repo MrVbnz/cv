@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { prerenderLocales } from './scripts/prerender';
 
 export default defineConfig({
   base: '/cv/',
-  plugins: [react()],
+  plugins: [react(), prerenderLocales()],
   server: {
     host: '0.0.0.0',
   },

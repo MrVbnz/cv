@@ -1,23 +1,36 @@
 import { StrictMode } from 'react';
 import { flushSync } from 'react-dom';
-import { createRoot } from 'react-dom/client';
-import { ChakraProvider } from '@chakra-ui/react';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import { App } from './App';
-import { LocaleProvider } from './i18n/LocaleProvider';
-import { system } from './theme';
+import { localeFromPath, localeStorageKey, resolveLocale } from './i18n/locale';
 import './print.css';
 
-const root = createRoot(document.getElementById('root')!);
+function preferredLocale() {
+  let saved = null;
+  try {
+    saved = localStorage.getItem(localeStorageKey);
+  } catch {
+    /* Storage can be disabled. */
+  }
+  return resolveLocale(saved, navigator.languages);
+}
 
-// Mount the fragment targets before the browser resolves the initial anchor.
-flushSync(() => {
-  root.render(
-    <StrictMode>
-      <ChakraProvider value={system}>
-        <LocaleProvider>
-          <App />
-        </LocaleProvider>
-      </ChakraProvider>
-    </StrictMode>,
-  );
-});
+const root = document.getElementById('root')!;
+const pathLocale = localeFromPath(window.location.pathname);
+const prerendered = root.hasChildNodes();
+const app = (
+  <StrictMode>
+    <App
+      initialLocale={pathLocale ?? preferredLocale()}
+      localized={pathLocale !== undefined}
+      prerendered={prerendered}
+    />
+  </StrictMode>
+);
+
+if (prerendered) {
+  hydrateRoot(root, app);
+} else {
+  // Mount the fragment targets before the browser resolves the initial anchor.
+  flushSync(() => createRoot(root).render(app));
+}

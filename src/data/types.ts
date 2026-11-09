@@ -16,7 +16,6 @@ export interface ResumeData {
     toggleNavigation: string;
     language: string;
     contacts: string;
-    skipToContent: string;
     sections: Record<SectionId, string>;
   };
   languages: { code: Locale; label: string }[];

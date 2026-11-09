@@ -6,7 +6,7 @@ type GradientSnapshot = {
   opaque: boolean;
   error: number;
 };
-type GradientWindow = Window & { gradientSnapshot?: GradientSnapshot };
+type GradientWindow = Window & { gradientSnapshot?: GradientSnapshot; gradientFades?: number };
 
 test('gradient follows scrolling, respects reduced motion and renders at screen density', async ({
   browser,
@@ -18,6 +18,12 @@ test('gradient follows scrolling, respects reduced motion and renders at screen 
       reducedMotion: 'no-preference',
     });
     await context.addInitScript(() => {
+      const animate = HTMLCanvasElement.prototype.animate;
+      HTMLCanvasElement.prototype.animate = function (...args) {
+        const state = window as GradientWindow;
+        state.gradientFades = (state.gradientFades ?? 0) + 1;
+        return animate.apply(this, args);
+      };
       const original = WebGLRenderingContext.prototype.drawArrays;
       WebGLRenderingContext.prototype.drawArrays = function (...args) {
         original.apply(this, args);
@@ -51,6 +57,7 @@ test('gradient follows scrolling, respects reduced motion and renders at screen 
     await expect
       .poll(() => page.evaluate(() => (window as GradientWindow).gradientSnapshot?.opaque))
       .toBe(true);
+    expect(await page.evaluate(() => (window as GradientWindow).gradientFades)).toBe(1);
     const dimensions = await canvas.evaluate((element) => {
       const surface = element as HTMLCanvasElement;
       return {
@@ -77,7 +84,12 @@ test('gradient follows scrolling, respects reduced motion and renders at screen 
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
     await page.waitForTimeout(150);
     expect(await page.evaluate(() => (window as GradientWindow).gradientSnapshot)).toEqual(reduced);
+    expect(await page.evaluate(() => (window as GradientWindow).gradientFades)).toBe(1);
     expect(reduced.error).toBe(0);
+
+    await page.reload();
+    await expect(canvas).toBeVisible();
+    expect(await page.evaluate(() => (window as GradientWindow).gradientFades ?? 0)).toBe(0);
     expect(errors).toEqual([]);
     await context.close();
   }

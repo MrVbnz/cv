@@ -21,7 +21,6 @@
 
   nav,
   button,
-  a[href='#main-content'],
   [data-testid='menu-backdrop'],
   canvas {
     display: none !important;

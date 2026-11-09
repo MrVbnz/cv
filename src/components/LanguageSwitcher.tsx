@@ -1,8 +1,9 @@
 import { Box, Button, HStack } from '@chakra-ui/react';
 import { useLocale } from '../i18n/LocaleProvider';
+import { localePath } from '../i18n/locale';
 
 export function LanguageSwitcher() {
-  const { locale, setLocale, data } = useLocale();
+  const { locale, localized, setLocale, data } = useLocale();
   const selectedIndex = data.languages.findIndex((language) => language.code === locale);
 
   return (
@@ -35,6 +36,7 @@ export function LanguageSwitcher() {
       {data.languages.map(({ code, label }) => (
         <Button
           key={code}
+          asChild={localized}
           size="sm"
           w="12"
           minW="12"
@@ -44,11 +46,32 @@ export function LanguageSwitcher() {
           bg="transparent"
           color={locale === code ? 'sidebar' : 'muted'}
           _hover={{ color: locale === code ? 'sidebar' : 'ink' }}
-          aria-pressed={locale === code}
+          aria-pressed={localized ? undefined : locale === code}
           lang={code}
-          onClick={() => setLocale(code)}
+          onClick={localized ? undefined : () => setLocale(code)}
         >
-          {label}
+          {localized ? (
+            <a
+              href={localePath(code)}
+              aria-current={locale === code ? 'page' : undefined}
+              onClick={(event) => {
+                if (
+                  event.button !== 0 ||
+                  event.metaKey ||
+                  event.ctrlKey ||
+                  event.shiftKey ||
+                  event.altKey
+                )
+                  return;
+                event.preventDefault();
+                setLocale(code);
+              }}
+            >
+              {label}
+            </a>
+          ) : (
+            label
+          )}
         </Button>
       ))}
     </HStack>

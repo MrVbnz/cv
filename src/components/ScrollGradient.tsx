@@ -13,6 +13,8 @@ export function ScrollGradient() {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
     let contextLost = false;
+    let revealed = false;
+    let fade: Animation | undefined;
 
     const draw = () => {
       frame = 0;
@@ -23,10 +25,23 @@ export function ScrollGradient() {
       surface.style.width = `${70 - 28 * landscapeWeight}%`;
       const distance = document.documentElement.scrollHeight - window.innerHeight;
       const progress = motion.matches || distance <= 0 ? 0 : window.scrollY / distance;
-      renderer.draw(Math.max(0, Math.min(1, progress)));
+      const drawn = renderer.draw(Math.max(0, Math.min(1, progress)));
+      if (drawn && !revealed) {
+        revealed = true;
+        if (!motion.matches) {
+          fade = surface.animate([{ opacity: 0 }, { opacity: 1 }], {
+            duration: 500,
+            easing: 'ease-out',
+          });
+        }
+      }
     };
     const schedule = () => {
       if (!frame) frame = window.requestAnimationFrame(draw);
+    };
+    const onMotionChange = () => {
+      if (motion.matches) fade?.cancel();
+      schedule();
     };
     const onContextLost = (event: Event) => {
       event.preventDefault();
@@ -44,18 +59,19 @@ export function ScrollGradient() {
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     document.addEventListener('visibilitychange', schedule);
-    motion.addEventListener('change', schedule);
+    motion.addEventListener('change', onMotionChange);
     surface.addEventListener('webglcontextlost', onContextLost);
     surface.addEventListener('webglcontextrestored', onContextRestored);
     schedule();
 
     return () => {
       window.cancelAnimationFrame(frame);
+      fade?.cancel();
       observer.disconnect();
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       document.removeEventListener('visibilitychange', schedule);
-      motion.removeEventListener('change', schedule);
+      motion.removeEventListener('change', onMotionChange);
       surface.removeEventListener('webglcontextlost', onContextLost);
       surface.removeEventListener('webglcontextrestored', onContextRestored);
       renderer?.dispose();

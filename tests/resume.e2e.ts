@@ -62,6 +62,68 @@ test('switches all sections in place and remembers the selected language', async
   expect(errors).toEqual([]);
 });
 
+test('language-specific pages serve the complete CV without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto('/cv/en/');
+
+  for (const [code, next, name] of [
+    ['en', 'ru', 'Dmitry Efremov'],
+    ['ru', 'en', 'Ефремов Дмитрий'],
+  ] as const) {
+    await expect(page).toHaveURL(new RegExp(`/cv/${code}/$`));
+    await expect(page.locator('html')).toHaveAttribute('lang', code);
+    await expect(page).toHaveTitle(resumes[code].meta.title);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      'content',
+      resumes[code].meta.description,
+    );
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(name);
+    await expect(page.locator('main section')).toHaveCount(6);
+    await expect(page.locator('canvas')).toHaveCount(0);
+    await page.getByRole('link', { name: next.toUpperCase(), exact: true }).click();
+  }
+  await expect(page).toHaveURL(/\/cv\/en\/$/);
+  await context.close();
+});
+
+test('language routes switch in place and save the language from direct links', async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('./');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('cv.locale'))).toBe('en');
+  await page.goto('/cv/ru/#skills');
+  await expect(page.locator('#skills-heading')).toHaveText(resumes.ru.ui.sections.skills);
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('cv.locale'))).toBe('ru');
+
+  const navigationRequests: string[] = [];
+  page.on('request', (request) => {
+    if (request.isNavigationRequest()) navigationRequests.push(request.url());
+  });
+  await page.getByRole('link', { name: 'EN', exact: true }).click();
+  await expect(page).toHaveURL(/\/cv\/en\/#skills$/);
+  await expect(page.locator('#skills-heading')).toHaveText(resumes.en.ui.sections.skills);
+  await expect(page.locator('#skills-heading')).toBeInViewport();
+  await page.goBack();
+  await expect(page).toHaveURL(/\/cv\/ru\/#skills$/);
+  await expect(page.locator('#skills-heading')).toHaveText(resumes.ru.ui.sections.skills);
+  await page.goForward();
+  await expect(page.locator('#skills-heading')).toHaveText(resumes.en.ui.sections.skills);
+  expect(navigationRequests).toEqual([]);
+
+  await page.goto('/cv/ru/');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('cv.locale'))).toBe('ru');
+  await page.goto('./');
+  await expect(page.locator('#skills-heading')).toHaveText(resumes.ru.ui.sections.skills);
+  expect(errors).toEqual([]);
+});
+
 test('project links work by keyboard, across languages, and on direct visits', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -204,10 +266,6 @@ test('responsive navigation resets the mobile menu and stays usable on short scr
 test('keyboard navigation updates the address and supports browser history', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
-  await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: resumes.en.ui.skipToContent })).toBeFocused();
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#main-content')).toBeFocused();
   const projects = page.getByRole('link', { name: resumes.en.ui.sections.projects, exact: true });
   await projects.focus();
   await page.keyboard.press('Enter');

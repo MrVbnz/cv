@@ -1,4 +1,5 @@
-import { Box, Link } from '@chakra-ui/react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { Navigation } from './components/Navigation';
 import { ResumeSection } from './components/ResumeSection';
 import { ScrollGradient } from './components/ScrollGradient';
@@ -8,28 +9,37 @@ import { Experience } from './components/sections/Experience';
 import { Projects } from './components/sections/Projects';
 import { Education } from './components/sections/Education';
 import { Interests } from './components/sections/Interests';
-import { useLocale } from './i18n/LocaleProvider';
+import { LocaleProvider } from './i18n/LocaleProvider';
+import type { Locale } from './i18n/locale';
+import { system } from './theme';
 
-export function App() {
-  const { data } = useLocale();
+export function App({
+  initialLocale,
+  localized,
+  prerendered,
+}: {
+  initialLocale: Locale;
+  localized: boolean;
+  prerendered: boolean;
+}) {
+  return (
+    <ChakraProvider value={system}>
+      <LocaleProvider initialLocale={initialLocale} localized={localized}>
+        <Resume prerendered={prerendered} />
+      </LocaleProvider>
+    </ChakraProvider>
+  );
+}
+
+function Resume({ prerendered }: { prerendered: boolean }) {
+  const [interactive, setInteractive] = useState(!prerendered);
+
+  useEffect(() => setInteractive(true), []);
 
   return (
     <>
-      <Link
-        href="#main-content"
-        position="fixed"
-        top="-20"
-        left="4"
-        zIndex="20"
-        bg="sidebar"
-        p="3"
-        color="accent"
-        _focus={{ top: '4' }}
-      >
-        {data.ui.skipToContent}
-      </Link>
-      <Navigation />
-      <ScrollGradient />
+      <Navigation interactive={interactive} />
+      {interactive && <ScrollGradient />}
       <Box
         as="main"
         id="main-content"

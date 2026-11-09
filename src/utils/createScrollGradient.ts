@@ -118,10 +118,11 @@ export function createScrollGradient(canvas: HTMLCanvasElement) {
       const height = Math.round(bounds.height * window.devicePixelRatio);
       if (!width || !height || width > limits[0] || height > limits[1] || gl.isContextLost()) {
         canvas.style.visibility = 'hidden';
-        return;
+        return false;
       }
       const resized = canvas.width !== width || canvas.height !== height;
-      if (!resized && previousProgress === value && canvas.style.visibility === 'visible') return;
+      if (!resized && previousProgress === value && canvas.style.visibility === 'visible')
+        return false;
       if (resized) {
         canvas.width = width;
         canvas.height = height;
@@ -132,6 +133,7 @@ export function createScrollGradient(canvas: HTMLCanvasElement) {
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       previousProgress = value;
       canvas.style.visibility = 'visible';
+      return true;
     },
     dispose,
   };
