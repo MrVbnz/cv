@@ -1,4 +1,11 @@
-export const sectionIds = ['about', 'skills', 'experience', 'projects', 'interests'] as const;
+export const sectionIds = [
+  'about',
+  'skills',
+  'experience',
+  'projects',
+  'education',
+  'interests',
+] as const;
 export type SectionId = (typeof sectionIds)[number];
 export type ContactKind = 'github' | 'telegram' | 'linkedin';
 
@@ -17,15 +24,16 @@ export interface ResumeData {
   profile: {
     surname: string;
     givenName: string;
+    givenNameFirst: boolean;
     email: string;
     location: string;
-    summary: string;
+    summary: string[];
     social: { kind: ContactKind; label: string; href: string }[];
   };
   skills: {
     id: string;
     title: string;
-    groups: { title?: string; items: string[] }[];
+    groups: ({ title?: string; items: string[] } | { title?: string; text: string })[];
   }[];
   experience: { id: string; role: string; company: string; companyUrl: string; period: string }[];
   projects: {
@@ -34,10 +42,12 @@ export interface ResumeData {
     items: {
       id: string;
       title: string;
+      experienceSummary?: { title?: string; contribution: string };
       technologies: { label: string; value: string }[];
       paragraphs: string[];
     }[];
   }[];
-  interests: { id: string; title: string; description: string }[];
+  education: { title: string; description: string }[];
+  interests: string;
 }
 import type { Locale } from '../i18n/locale';

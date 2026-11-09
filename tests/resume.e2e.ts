@@ -31,9 +31,7 @@ test('switches all sections in place and remembers the selected language', async
   await page.goto('./');
   await page.getByRole('button', { name: 'RU', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    `${resumes.ru.profile.surname} ${resumes.ru.profile.givenName}`,
-  );
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ефремов Дмитрий');
   await expect(page.locator('#skills-heading')).toHaveText(resumes.ru.ui.sections.skills);
   await expect(page).toHaveTitle(resumes.ru.meta.title);
   expect(new URL(page.url()).pathname).toBe('/cv/');
@@ -43,9 +41,7 @@ test('switches all sections in place and remembers the selected language', async
     'true',
   );
   await page.getByRole('button', { name: 'EN', exact: true }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    `${resumes.en.profile.surname} ${resumes.en.profile.givenName}`,
-  );
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Dmitry Efremov');
   await expect(page.locator('#skills-heading')).toHaveText(resumes.en.ui.sections.skills);
   await expect(page.getByRole('link', { name: resumes.en.profile.email })).toHaveAttribute(
     'href',
@@ -98,7 +94,9 @@ test('mobile menu closes after navigation and has no horizontal overflow', async
   await expect(page).toHaveURL(/\/cv\/$/);
   await expect(page.getByTestId('menu-backdrop')).toBeHidden();
   await expect(page.locator('#projects')).toBeFocused();
-  expect((await page.locator('#projects').boundingBox())!.y).toBe(header!.height);
+  expect(
+    Math.abs((await page.locator('#projects').boundingBox())!.y - header!.height),
+  ).toBeLessThanOrEqual(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );

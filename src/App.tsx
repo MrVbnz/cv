@@ -6,6 +6,7 @@ import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
 import { Experience } from './components/sections/Experience';
 import { Projects } from './components/sections/Projects';
+import { Education } from './components/sections/Education';
 import { Interests } from './components/sections/Interests';
 import { useLocale } from './i18n/LocaleProvider';
 import { scrollToElement } from './utils/scrollToElement';
@@ -53,6 +54,9 @@ export function App() {
           </ResumeSection>
           <ResumeSection id="projects">
             <Projects />
+          </ResumeSection>
+          <ResumeSection id="education">
+            <Education />
           </ResumeSection>
           <ResumeSection id="interests">
             <Interests />

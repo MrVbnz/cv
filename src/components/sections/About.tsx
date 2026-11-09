@@ -6,6 +6,11 @@ export function About() {
   const {
     data: { profile },
   } = useLocale();
+  const givenName = (
+    <Text as="span" color="accent">
+      {profile.givenName}
+    </Text>
+  );
   return (
     <Stack gap="7">
       <Heading
@@ -17,10 +22,15 @@ export function About() {
         lineHeight="1.15"
         letterSpacing="tight"
       >
-        {profile.surname}{' '}
-        <Text as="span" color="accent">
-          {profile.givenName}
-        </Text>
+        {profile.givenNameFirst ? (
+          <>
+            {givenName} {profile.surname}
+          </>
+        ) : (
+          <>
+            {profile.surname} {givenName}
+          </>
+        )}
       </Heading>
       <HStack flexWrap="wrap" columnGap="2" rowGap="1">
         <Text color="muted">{profile.location}</Text>
@@ -31,9 +41,13 @@ export function About() {
           {profile.email}
         </Link>
       </HStack>
-      <Text fontSize="lg" lineHeight="1.8" maxW="55rem">
-        {profile.summary}
-      </Text>
+      <Stack gap="3" maxW="55rem">
+        {profile.summary.map((paragraph) => (
+          <Text key={paragraph} fontSize="lg" lineHeight="1.8">
+            {paragraph}
+          </Text>
+        ))}
+      </Stack>
       <ContactLinks />
     </Stack>
   );

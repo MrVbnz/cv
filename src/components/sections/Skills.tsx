@@ -18,11 +18,15 @@ export function Skills() {
                     {group.title}
                   </Text>
                 )}
-                <List.Root ps="5" gap="1" color="muted">
-                  {group.items.map((item) => (
-                    <List.Item key={item}>{item}</List.Item>
-                  ))}
-                </List.Root>
+                {'items' in group ? (
+                  <List.Root ps="5" gap="1" color="muted">
+                    {group.items.map((item) => (
+                      <List.Item key={item}>{item}</List.Item>
+                    ))}
+                  </List.Root>
+                ) : (
+                  <Text color="muted">{group.text}</Text>
+                )}
               </Box>
             ))}
           </Stack>

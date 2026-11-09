@@ -19,7 +19,6 @@ describe('resume language tables', () => {
       expectUniqueIds(data.experience);
       expectUniqueIds(data.projects);
       expectUniqueIds(data.projects.flatMap((group) => group.items));
-      expectUniqueIds(data.interests);
       expect(new Set(data.profile.social.map((contact) => contact.kind)).size).toBe(
         data.profile.social.length,
       );
