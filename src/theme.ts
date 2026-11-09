@@ -41,6 +41,9 @@ export const system = createSystem(
       body: { bg: 'canvas', color: 'ink' },
       '::selection': { bg: 'accent', color: 'sidebar' },
       ':focus-visible': { outline: '2px solid', outlineColor: 'accent', outlineOffset: '4px' },
+      '#main-content:focus, #main-content :is(section, h4)[tabindex="-1"]:focus': {
+        outline: 'none',
+      },
     },
   }),
 );

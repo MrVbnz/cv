@@ -85,7 +85,7 @@ test('project links work by keyboard, across languages, and on direct visits', a
   await page.getByRole('button', { name: 'RU', exact: true }).click();
   await expect(heading).toHaveText('VR-тренажёр ЭП2Д');
   await expect(heading).toBeInViewport();
-  await expect(page.locator('#education-heading')).toHaveText('Образование и языки');
+  await expect(page.locator('#education-heading')).toHaveText('Образование');
 
   const directVisit = await page.context().newPage();
   await directVisit.goto(page.url());

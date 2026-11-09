@@ -17,7 +17,6 @@ export interface ResumeData {
     language: string;
     contacts: string;
     skipToContent: string;
-    portraitAlt: string;
     sections: Record<SectionId, string>;
   };
   languages: { code: Locale; label: string }[];

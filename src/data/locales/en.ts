@@ -1,7 +1,7 @@
 import type { ResumeData } from '../types';
 
 const summary = [
-  'C# developer with three years of professional experience. In Unity, I built scenario authoring tools for VR training simulators and took gameplay mechanics for a VR attraction from prototype to a client build. I also worked on the combat system for a mobile multiplayer RTS and procedural mesh generation in a 3D interior and furniture design tool.',
+  'C# developer with three years of professional experience. In Unity, I built scenario authoring tools for VR training simulators and took gameplay mechanics for a VR attraction from prototype to project handover. I also worked on the combat system for a mobile multiplayer RTS and procedural mesh generation in a 3D interior and furniture design tool.',
   'I enjoy integration work and exploring unfamiliar technologies. I often take on tasks beyond Unity development.',
 ];
 
@@ -16,14 +16,13 @@ export default {
     language: 'Language',
     contacts: 'Contact links',
     skipToContent: 'Skip to content',
-    portraitAlt: 'Dmitry Efremov',
     sections: {
       about: 'About',
       skills: 'Skills',
       experience: 'Experience',
       projects: 'Projects',
       interests: 'Interests',
-      education: 'Education and Languages',
+      education: 'Education',
     },
   },
   languages: [
@@ -99,24 +98,16 @@ export default {
       ],
     },
     {
-      id: 'project-technologies',
-      title: 'Additional Project Technologies',
+      id: 'team-leadership',
+      title: 'Development Coordination',
       groups: [
         {
-          title: 'Web development and deployment',
-          text: 'ASP.NET, EF Core, React (TypeScript), SignalR, Docker Compose, Nginx',
-        },
-        {
-          title: 'Android app maintenance',
-          text: '.NET MAUI',
-        },
-        {
-          title: 'Data access in a legacy 3D editor',
-          text: 'Delphi. SQLite and MySQL through a shared provider.',
-        },
-        {
-          title: 'Web-based AR application',
-          text: 'JavaScript, Three.js, AR.js',
+          items: [
+            'Task allocation within a development team',
+            'Coordination with 3D modelers',
+            'Onboarding and mentoring new developers',
+            'Release coordination and client handover',
+          ],
         },
       ],
     },
@@ -134,6 +125,24 @@ export default {
             'Implementation plans for multi-step tasks (ExecPlans)',
             'MCP tools',
           ],
+        },
+      ],
+    },
+    {
+      id: 'project-technologies',
+      title: 'Additional Project Technologies',
+      groups: [
+        {
+          title: 'Web development and deployment',
+          text: 'ASP.NET, EF Core, React (TypeScript), SignalR, Docker Compose, Nginx',
+        },
+        {
+          title: 'Android app maintenance',
+          text: '.NET MAUI',
+        },
+        {
+          title: 'Web-based AR application',
+          text: 'JavaScript, Three.js, AR.js',
         },
       ],
     },
@@ -182,11 +191,11 @@ export default {
           ],
           paragraphs: [
             'A location-based entertainment (LBE) experience focused on high-quality graphics and immersion. The recording feature used physical camera tracking to composite footage of the player with gameplay from the virtual world.',
-            'I took the gameplay mechanics I developed from prototype to the near-final build delivered to the client. I prototyped visual effects, built demo scenes, and integrated prototypes into playable sequences. I also worked on slow motion, playback control, and a custom audio system, and tuned shaders. After delivering the build to the client, we began collecting feedback.',
-            'I compared performance across scene sections, inspected rendering with Frame Debugger, and analyzed loaded meshes, textures, and materials. Environment meshes and global illumination were the main bottlenecks. To preserve lighting quality, we focused on optimizing the environment geometry. We switched from mesh-based terrain to Unity Terrain, introduced automatic LOD generation for environment assets, added tree impostors, and replaced distant vegetation with custom models. These changes let us increase the render resolution per eye. We later added foveated rendering.',
+            'I developed gameplay mechanics from prototype through project handover. I prototyped visual effects, built demo scenes, and integrated prototypes into playable sequences. I also worked on slow motion, playback control, and a custom audio system, and tuned shaders.',
+            'I compared performance across scene sections, inspected rendering with Frame Debugger, and analyzed loaded meshes, textures, and materials. Environment meshes and global illumination were the main bottlenecks. To preserve lighting quality, we started by optimizing the environment geometry. We switched from mesh-based terrain to Unity Terrain, introduced automatic LOD generation for environment assets, added tree impostors, replaced distant vegetation with custom models, and enabled foveated rendering. Optimizing the environment let us increase the render resolution in VR.',
           ],
           experienceSummary: {
-            contribution: 'gameplay mechanics from prototype to client build',
+            contribution: 'gameplay mechanics from prototype to project handover',
           },
         },
         {
@@ -438,8 +447,7 @@ export default {
       ],
     },
   ],
-  interests:
-    'Implementing algorithms in C/C++, hiking, cycling, 3D printing, and miniature painting.',
+  interests: 'Hiking, cycling, 3D printing, and miniature painting.',
   education: [
     {
       title: 'Ural Federal University (UrFU)',

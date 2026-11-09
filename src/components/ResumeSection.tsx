@@ -25,9 +25,14 @@ export function ResumeSection({ id, children }: { id: SectionId; children: React
         pointerEvents: 'none',
       }}
     >
-      <Box w="full" py={{ base: '8', lg: '10' }}>
+      <Box w="full" py={{ base: '8', lg: id === 'skills' ? '6' : '10' }}>
         {id !== 'about' && (
-          <Heading id={`${id}-heading`} as="h2" size="3xl" mb="10">
+          <Heading
+            id={`${id}-heading`}
+            as="h2"
+            size="3xl"
+            mb={{ base: '10', lg: id === 'skills' ? '5' : '10' }}
+          >
             {data.ui.sections[id]}
           </Heading>
         )}

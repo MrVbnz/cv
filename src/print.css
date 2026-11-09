@@ -90,7 +90,12 @@
     gap: 6mm;
   }
 
-  #skills > div > div > div,
+  #skills > div > div > div {
+    display: flex;
+    gap: 6mm;
+  }
+
+  #skills > div > div > div > div,
   #experience > div > div > div,
   #interests > div > div > div,
   article {
