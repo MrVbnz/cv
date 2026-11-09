@@ -1,8 +1,8 @@
 import { Box, Button, HStack } from '@chakra-ui/react';
-import { useLanguageSelection } from '../hooks/useLanguageSelection';
+import { useLocale } from '../i18n/LocaleProvider';
 
 export function LanguageSwitcher() {
-  const { locale, selectLocale, data } = useLanguageSelection();
+  const { locale, setLocale, data } = useLocale();
   const selectedIndex = data.languages.findIndex((language) => language.code === locale);
 
   return (
@@ -46,7 +46,7 @@ export function LanguageSwitcher() {
           _hover={{ color: locale === code ? 'sidebar' : 'ink' }}
           aria-pressed={locale === code}
           lang={code}
-          onClick={() => selectLocale(code)}
+          onClick={() => setLocale(code)}
         >
           {label}
         </Button>

@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { useLocale } from '../../i18n/LocaleProvider';
-import { scrollToElement } from '../../utils/scrollToElement';
 import { Hamburger } from '../Hamburger';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { SectionLinks } from './SectionLinks';
@@ -96,12 +95,7 @@ export function MobileNavigation() {
             transition="transform var(--navigation-duration) cubic-bezier(.22,1,.36,1)"
             _motionReduce={{ transition: 'none' }}
           >
-            <SectionLinks
-              onSelect={(id) => {
-                setOpen(false);
-                scrollToElement(id, { focus: true });
-              }}
-            />
+            <SectionLinks onSelect={() => setOpen(false)} />
           </Box>
         </Box>
       </Box>

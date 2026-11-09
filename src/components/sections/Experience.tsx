@@ -29,9 +29,9 @@ export function Experience() {
                 (project) =>
                   project.experienceSummary && (
                     <List.Item key={project.id}>
-                      <Text as="span" color="ink" fontWeight="medium">
+                      <Link href={`#${project.id}`} color="accent" textDecoration="underline">
                         {project.experienceSummary.title ?? project.title}
-                      </Text>
+                      </Link>
                       {' · '}
                       {project.experienceSummary.contribution}
                     </List.Item>

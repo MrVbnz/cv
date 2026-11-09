@@ -62,6 +62,44 @@ test('switches all sections in place and remembers the selected language', async
   expect(errors).toEqual([]);
 });
 
+test('project links work by keyboard, across languages, and on direct visits', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('./');
+  await page.getByRole('button', { name: resumes.en.ui.toggleNavigation }).click();
+  await page.getByRole('link', { name: resumes.en.ui.sections.experience, exact: true }).click();
+
+  const link = page
+    .locator('#experience')
+    .getByRole('link', { name: 'EP2D VR Training Simulator' });
+  await link.focus();
+  await page.keyboard.press('Enter');
+
+  const heading = page.locator('#ep2d-simulator');
+  await expect(page).toHaveURL(/\/cv\/#ep2d-simulator$/);
+  await expect(heading).toBeFocused();
+  await expect(heading).toBeInViewport();
+  const headerHeight = (await page.locator('nav').boundingBox())!.height;
+  expect((await heading.boundingBox())!.y).toBeGreaterThanOrEqual(headerHeight);
+
+  await page.getByRole('button', { name: 'RU', exact: true }).click();
+  await expect(heading).toHaveText('VR-тренажёр ЭП2Д');
+  await expect(heading).toBeInViewport();
+  await expect(page.locator('#education-heading')).toHaveText('Образование и языки');
+
+  const directVisit = await page.context().newPage();
+  await directVisit.goto(page.url());
+  await expect(directVisit.locator('#ep2d-simulator')).toBeInViewport();
+  await directVisit.close();
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\/cv\/#experience$/);
+  await expect(page.locator('#experience')).toBeInViewport();
+  await page.goForward();
+  await expect(page).toHaveURL(/\/cv\/#ep2d-simulator$/);
+  await expect(heading).toBeInViewport();
+});
+
 test('mobile menu closes after navigation and has no horizontal overflow', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -86,12 +124,12 @@ test('mobile menu closes after navigation and has no horizontal overflow', async
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await toggle.click();
   await page.getByRole('button', { name: 'RU', exact: true }).click();
-  await page.getByRole('button', { name: resumes.ru.ui.sections.projects, exact: true }).click();
+  await page.getByRole('link', { name: resumes.ru.ui.sections.projects, exact: true }).click();
   await expect(page.getByRole('button', { name: 'Переключить навигацию' })).toHaveAttribute(
     'aria-expanded',
     'false',
   );
-  await expect(page).toHaveURL(/\/cv\/$/);
+  await expect(page).toHaveURL(/\/cv\/#projects$/);
   await expect(page.getByTestId('menu-backdrop')).toBeHidden();
   await expect(page.locator('#projects')).toBeFocused();
   expect(
@@ -119,7 +157,7 @@ test('detects Russian and works with blocked storage', async ({ browser }) => {
   await context.close();
 });
 
-test('language changes align the active section like menu navigation', async ({ page }) => {
+test('language changes preserve section anchors', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   for (const viewport of [
     { width: 1920, height: 1080 },
@@ -129,23 +167,13 @@ test('language changes align the active section like menu navigation', async ({ 
     await page.goto('./');
     await page.evaluate(() => document.fonts.ready);
     for (const id of ['experience', 'skills', 'projects']) {
-      await page
-        .locator(`#${id}`)
-        .evaluate((section) => section.scrollIntoView({ block: 'start', behavior: 'instant' }));
+      await page.goto(`./#${id}`);
       for (const code of ['ru', 'en']) {
         await page.getByRole('button', { name: code.toUpperCase(), exact: true }).click();
-        await expect
-          .poll(() =>
-            page.locator(`#${id}`).evaluate((section) => {
-              const bounds = section.getBoundingClientRect();
-              const headerHeight =
-                parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-              return Math.abs(bounds.top - headerHeight);
-            }),
-          )
-          .toBeLessThanOrEqual(1);
+        await expect(page).toHaveURL(new RegExp(`#${id}$`));
+        await expect(page.locator(`#${id}-heading`)).toBeInViewport();
         const data = resumes[code as 'en' | 'ru'];
-        await expect(page.locator('nav button[aria-current="location"]')).toHaveText(
+        await expect(page.locator('nav a[aria-current="location"]')).toHaveText(
           data.ui.sections[id as keyof typeof data.ui.sections],
         );
       }
@@ -162,7 +190,7 @@ test('responsive navigation resets the mobile menu and stays usable on short scr
   await page.getByRole('button', { name: resumes.en.ui.toggleNavigation }).click();
   await expect(page.getByTestId('menu-backdrop')).toBeVisible();
   await page.setViewportSize({ width: 1280, height: 400 });
-  await page.getByRole('button', { name: resumes.en.ui.sections.interests, exact: true }).click();
+  await page.getByRole('link', { name: resumes.en.ui.sections.interests, exact: true }).click();
   await page.getByRole('button', { name: 'RU', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
   await page.setViewportSize({ width: 390, height: 844 });
@@ -173,18 +201,29 @@ test('responsive navigation resets the mobile menu and stays usable on short scr
   await expect(page.getByTestId('menu-backdrop')).toBeHidden();
 });
 
-test('keyboard navigation moves focus without changing the URL', async ({ page }) => {
+test('keyboard navigation updates the address and supports browser history', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('button', { name: resumes.en.ui.skipToContent })).toBeFocused();
+  await expect(page.getByRole('link', { name: resumes.en.ui.skipToContent })).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('#main-content')).toBeFocused();
-  const projects = page.getByRole('button', { name: resumes.en.ui.sections.projects, exact: true });
+  const projects = page.getByRole('link', { name: resumes.en.ui.sections.projects, exact: true });
   await projects.focus();
-  await page.keyboard.press('Space');
+  await page.keyboard.press('Enter');
   await expect(page.locator('#projects')).toBeFocused();
-  await expect(page).toHaveURL(/\/cv\/$/);
+  await expect(page).toHaveURL(/\/cv\/#projects$/);
+
+  await page.getByRole('link', { name: resumes.en.ui.sections.skills, exact: true }).click();
+  await expect(page).toHaveURL(/\/cv\/#skills$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/cv\/#projects$/);
+  await expect(page.locator('#projects-heading')).toBeInViewport();
+  await page.goForward();
+  await expect(page).toHaveURL(/\/cv\/#skills$/);
+  await expect(page.locator('#skills-heading')).toBeInViewport();
+  await page.reload();
+  await expect(page.locator('#skills-heading')).toBeInViewport();
 });
 
 test('custom icons load the correct files for different screen densities', async ({

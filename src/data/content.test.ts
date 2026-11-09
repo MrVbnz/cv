@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { resumes } from './index';
+import { sectionIds } from './types';
 import { localeCodes } from '../i18n/locale';
 
 function expectUniqueIds(items: { id: string }[]) {
@@ -18,7 +19,10 @@ describe('resume language tables', () => {
       expectUniqueIds(data.skills);
       expectUniqueIds(data.experience);
       expectUniqueIds(data.projects);
-      expectUniqueIds(data.projects.flatMap((group) => group.items));
+      expectUniqueIds([
+        ...sectionIds.map((id) => ({ id })),
+        ...data.projects.flatMap((group) => group.items),
+      ]);
       expect(new Set(data.profile.social.map((contact) => contact.kind)).size).toBe(
         data.profile.social.length,
       );
@@ -27,4 +31,18 @@ describe('resume language tables', () => {
       }
     });
   }
+
+  it('keeps the project links ordered and consistent across languages', () => {
+    const projectLinks = (data: (typeof resumes)[keyof typeof resumes]) =>
+      data.experience.map((job) => {
+        const projects = data.projects.find((group) => group.id === job.id)?.items ?? [];
+        expect(projects.length).toBeGreaterThan(0);
+        return projects.map((project) => {
+          expect(project.experienceSummary?.contribution.trim()).toBeTruthy();
+          return project.id;
+        });
+      });
+
+    expect(projectLinks(resumes.en)).toEqual(projectLinks(resumes.ru));
+  });
 });

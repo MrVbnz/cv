@@ -9,15 +9,14 @@ import { Projects } from './components/sections/Projects';
 import { Education } from './components/sections/Education';
 import { Interests } from './components/sections/Interests';
 import { useLocale } from './i18n/LocaleProvider';
-import { scrollToElement } from './utils/scrollToElement';
 
 export function App() {
   const { data } = useLocale();
+
   return (
     <>
       <Link
-        as="button"
-        type="button"
+        href="#main-content"
         position="fixed"
         top="-20"
         left="4"
@@ -26,7 +25,6 @@ export function App() {
         p="3"
         color="accent"
         _focus={{ top: '4' }}
-        onClick={() => scrollToElement('main-content', { focus: true })}
       >
         {data.ui.skipToContent}
       </Link>

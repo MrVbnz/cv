@@ -1,6 +1,5 @@
 import { Box, Flex, Image, Link, Stack } from '@chakra-ui/react';
 import { useLocale } from '../../i18n/LocaleProvider';
-import { scrollToElement } from '../../utils/scrollToElement';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { SectionLinks } from './SectionLinks';
 
@@ -24,12 +23,7 @@ export function DesktopNavigation() {
     >
       {/* Balanced flexible rows center the profile; the footer keeps its own space on short screens. */}
       <Stack gridRow="2" align="center" gap="6" px="5">
-        <Link
-          as="button"
-          type="button"
-          borderRadius="full"
-          onClick={() => scrollToElement('about', { focus: true })}
-        >
+        <Link href="#about" borderRadius="full">
           <Image
             src={`${import.meta.env.BASE_URL}assets/img/profile.jpg`}
             alt={data.ui.portraitAlt}
@@ -40,7 +34,7 @@ export function DesktopNavigation() {
             borderColor="line"
           />
         </Link>
-        <SectionLinks onSelect={(id) => scrollToElement(id, { focus: true })} />
+        <SectionLinks />
       </Stack>
       <Flex gridRow="3" alignSelf="end" justify="center" p="5">
         <LanguageSwitcher />

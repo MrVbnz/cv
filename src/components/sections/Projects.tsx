@@ -3,6 +3,7 @@ import { useLocale } from '../../i18n/LocaleProvider';
 
 export function Projects() {
   const { data } = useLocale();
+
   return (
     <Stack gap="12">
       {data.projects.map((group) => (
@@ -19,7 +20,7 @@ export function Projects() {
                 borderColor="line"
                 pl={{ base: '4', md: '6' }}
               >
-                <Heading as="h4" size="xl" mb="4">
+                <Heading id={project.id} tabIndex={-1} scrollMarginTop="4" as="h4" size="xl" mb="4">
                   {project.title}
                 </Heading>
                 <Stack gap="2" mb="4">
