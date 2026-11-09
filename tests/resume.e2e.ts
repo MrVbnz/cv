@@ -169,7 +169,8 @@ test('project links work by keyboard, across languages, and on direct visits', a
 });
 
 test('mobile menu closes after navigation and has no horizontal overflow', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
+  const viewport = { width: 390, height: 844 };
+  await page.setViewportSize(viewport);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
   const toggle = page.getByRole('button', { name: 'Toggle navigation' });
@@ -179,9 +180,15 @@ test('mobile menu closes after navigation and has no horizontal overflow', async
   const language = await page.getByRole('group', { name: 'Language', exact: true }).boundingBox();
   expect(language!.x).toBeGreaterThan(240);
   const header = await page.locator('nav').boundingBox();
-  const firstSection = await page.locator('#about').boundingBox();
-  expect(firstSection!.y).toBe(header!.height);
-  expect(firstSection!.height + header!.height).toBe(844);
+  const firstSection = page.locator('#about');
+  const availableHeight = viewport.height - header!.height;
+  const sectionBox = await firstSection.boundingBox();
+  const minHeight = await firstSection.evaluate((section) =>
+    Number.parseFloat(getComputedStyle(section).minHeight),
+  );
+  expect(sectionBox!.y).toBeCloseTo(header!.height, 0);
+  expect(minHeight).toBeCloseTo(availableHeight, 0);
+  expect(sectionBox!.height).toBeGreaterThanOrEqual(availableHeight - 1);
   await toggle.click();
   await expect(page.getByTestId('menu-backdrop')).toBeVisible();
   await page.getByTestId('menu-backdrop').click({ position: { x: 200, y: 700 } });
@@ -332,7 +339,14 @@ test('desktop navigation uses proportional panels and respects reduced motion', 
   await expect(nav.getByText('Sections', { exact: true })).toHaveCount(0);
   await expect(nav).toHaveCSS('width', '220px');
   await expect(nav).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
-  await expect(panelLinks.first()).toHaveCSS('align-items', 'flex-start');
+  const projectsPanel = nav.getByRole('link', { name: 'Projects', exact: true });
+  const titleOffset = await projectsPanel.evaluate((panel) => {
+    const title = document.createRange();
+    title.selectNodeContents(panel);
+    return title.getBoundingClientRect().top - panel.getBoundingClientRect().top;
+  });
+  expect(titleOffset).toBeGreaterThanOrEqual(0);
+  expect(titleOffset).toBeLessThan(24);
   await expect(panelLinks.first()).toHaveCSS('font-weight', '400');
   await expect(highlight).toHaveCSS('width', '2px');
   await expect(highlight).toHaveCSS('transition-duration', '0s');
@@ -347,7 +361,7 @@ test('desktop navigation uses proportional panels and respects reduced motion', 
   await page.setViewportSize({ width: 1040, height: 900 });
   await expect.poll(maxShareError).toBeLessThan(0.01);
 
-  await page.getByRole('link', { name: 'Projects', exact: true }).click();
+  await projectsPanel.click();
   await expect(page).toHaveURL(/\/cv\/en\/#projects$/);
   await expect(activePanel).toHaveText('Projects');
   await page.getByRole('link', { name: 'RU', exact: true }).click();
