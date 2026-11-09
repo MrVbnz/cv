@@ -53,6 +53,7 @@ export function LanguageSwitcher() {
           {localized ? (
             <a
               href={localePath(code)}
+              draggable={false}
               aria-current={locale === code ? 'page' : undefined}
               onClick={(event) => {
                 if (

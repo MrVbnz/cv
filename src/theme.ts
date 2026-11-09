@@ -31,7 +31,8 @@ export const system = createSystem(
     globalCss: {
       html: {
         '--header-height': { base: '5.5rem', lg: '0px' },
-        '--sidebar-width': '17rem',
+        '--sidebar-width': '220px',
+        '--sidebar-indicator-duration': '300ms',
         '--navigation-duration': '160ms',
         '--language-duration': '80ms',
         scrollBehavior: 'smooth',

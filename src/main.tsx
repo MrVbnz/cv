@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { flushSync } from 'react-dom';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { App } from './App';
-import { localeFromPath, localeStorageKey, resolveLocale } from './i18n/locale';
+import { localeFromPath, localePath, localeStorageKey, resolveLocale } from './i18n/locale';
 import './print.css';
 
 function preferredLocale() {
@@ -16,13 +16,27 @@ function preferredLocale() {
 }
 
 const root = document.getElementById('root')!;
-const pathLocale = localeFromPath(window.location.pathname);
+const { pathname, search, hash } = window.location;
+const pathLocale = localeFromPath(pathname);
+const initialLocale = pathLocale ?? preferredLocale();
+const base = import.meta.env.BASE_URL;
+const atBase =
+  pathname === base || pathname === `${base}index.html` || pathname === base.slice(0, -1);
+
+if (atBase) {
+  window.history.replaceState(
+    window.history.state,
+    '',
+    `${localePath(initialLocale)}${search}${hash}`,
+  );
+}
+
 const prerendered = root.hasChildNodes();
 const app = (
   <StrictMode>
     <App
-      initialLocale={pathLocale ?? preferredLocale()}
-      localized={pathLocale !== undefined}
+      initialLocale={initialLocale}
+      localized={atBase || pathLocale !== undefined}
       prerendered={prerendered}
     />
   </StrictMode>

@@ -112,7 +112,7 @@ test('page remains usable when WebGL is unavailable', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await page.getByRole('link', { name: 'Projects', exact: true }).click();
   await expect(page.locator('#projects')).toBeFocused();
-  await page.getByRole('button', { name: 'RU', exact: true }).click();
+  await page.getByRole('link', { name: 'RU', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
   expect(errors).toEqual([]);
 });

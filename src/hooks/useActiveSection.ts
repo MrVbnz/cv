@@ -2,25 +2,34 @@ import { useEffect, useState } from 'react';
 import { sectionIds, type SectionId } from '../data/types';
 import { getActiveSection } from '../utils/getActiveSection';
 
-export function useActiveSection() {
+export function useActiveSection(measureHeights: boolean) {
   const [active, setActive] = useState<SectionId>('about');
+  const [heights, setHeights] = useState<number[]>();
+
   useEffect(() => {
-    const update = () => {
-      setActive(getActiveSection());
+    const sections = sectionIds.map((id) => document.getElementById(id));
+    const updateActive = () => setActive(getActiveSection());
+    const updateLayout = () => {
+      updateActive();
+      if (!measureHeights) return;
+      const next = sections.map((section) => section?.getBoundingClientRect().height || 1);
+      setHeights((previous) =>
+        previous?.every((height, i) => height === next[i]) ? previous : next,
+      );
     };
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    const observer = new ResizeObserver(update);
-    for (const id of sectionIds) {
-      const section = document.getElementById(id);
+    updateLayout();
+    window.addEventListener('scroll', updateActive, { passive: true });
+    window.addEventListener('resize', updateActive);
+    const observer = new ResizeObserver(updateLayout);
+    for (const section of sections) {
       if (section) observer.observe(section);
     }
     return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', updateActive);
+      window.removeEventListener('resize', updateActive);
       observer.disconnect();
     };
-  }, []);
-  return active;
+  }, [measureHeights]);
+
+  return { active, heights };
 }

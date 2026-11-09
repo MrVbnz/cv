@@ -44,6 +44,7 @@ export function MobileNavigation() {
         w="full"
         h="var(--header-height)"
         bg="sidebar"
+        userSelect="none"
         onKeyDown={(event) => {
           if (event.key === 'Escape' && open) closeMenu();
         }}

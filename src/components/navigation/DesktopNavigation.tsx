@@ -16,16 +16,18 @@ export function DesktopNavigation() {
       left="0"
       w="var(--sidebar-width)"
       h="100dvh"
-      bg="sidebar"
+      userSelect="none"
       display="grid"
-      overflowY="auto"
-      gridTemplateRows="minmax(1.25rem, 1fr) auto minmax(max-content, 1fr)"
+      gridTemplateRows="minmax(0, 1fr) auto"
+      gap="2"
+      px="3"
+      pt="7"
+      pb="5"
     >
-      {/* Keep the links centered and reserve space for the language switcher. */}
-      <Box gridRow="2" px="5">
-        <SectionLinks />
+      <Box overflowY="auto" scrollbarWidth="none">
+        <SectionLinks proportional />
       </Box>
-      <Flex gridRow="3" alignSelf="end" justify="center" p="5">
+      <Flex pt="3" justify="center">
         <LanguageSwitcher />
       </Flex>
     </Box>
